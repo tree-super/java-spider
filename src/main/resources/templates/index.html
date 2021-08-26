@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>持续注意力测试系统</title>
+	<meta name="description" content="持续注意力测试系统">
+
+	<meta name="renderer" content="webkit"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon"/>
+	<th:block th:replace="common/res::res"></th:block>
+
+	<style type="text/css">
+		html,
+		body {
+			height: 100%
+		}
+		.layout-panel{overflow: initial !important;}
+		/*主要样式*/
+		.subNavBox{width:210px;height:100%;background:#1b79ca;overflow:auto}
+		.subNavBox::-webkit-scrollbar{display:none}
+		.subNav{cursor:pointer;border-top:solid 1px #2183d7;border-bottom:solid 1px #156bb5;cursor:pointer;font:14px/40px "SegoeUI", "Microsoft YaHei", "Hiragino Sans GB"; line-height: 42px; color:#fff;background:url(res/images/jia.png) no-repeat 90% 50%;text-indent:40px;position:relative}
+		.subNav img{position:absolute;left:15px;top:13px}
+		.subNav:hover{color:#fff}
+		.currentDd{color:#fff}
+		.currentDt{background-image:url(res/images/jian.png)}
+		.currentZT{background-image:url(res/images/jia.png)}
+		.navContent{display:none;background:#0063b1;padding:0}
+		.navContent li{position:relative}
+		.navContent li a{width:100%;display:block;font-size:14px;line-height:42px;color:#fff;text-indent:55px;background:url(res/images/sj-icon.png) no-repeat 40px 18px}
+		.navContent li a:hover,.navContent li.active{color:#fff;background:url(res/images/sj-icon.png) no-repeat 40px 18px  #4f94cf}
+		a:focus{outline:none;-moz-outline:none}
+		.currentA{background:url(res/images/sj-icon.png) no-repeat 40px 18px #4f94cf}
+	</style>
+</head>
+
+<body class="easyui-layout" id="body">
+<div data-options="region:'north'" class="header">
+	<div class="logo">
+		<span>持续注意力测试系统</span>
+	</div>
+	<div class="inf-box">
+		<div class="info-icon" onClick="gotoFullScreen()" id="gotoFullScreen" title="全屏显示">
+			<i class="iconfont icon-fullscreen"></i>
+		</div>
+		<div class="info-icon" onClick="exitFullScreen()" id="exitFullScreen" title="退出全屏" style="display: none;">
+			<i class="iconfont icon-outfullscreen"></i>
+		</div>
+	</div>
+</div>
+<div data-options="region:'center',iconCls:'icon-ok'">
+	<div id="tabs" class="easyui-tabs" data-options="fit:true,border:false,plain:true,tools:'#tab-tools',cache:true,href:'welcome.html'">
+		<div title="首页">
+			<iframe id="if-content" frameborder="0" style="width:100%;height:100%;overflow:hidden"></iframe>
+		</div>
+	</div>
+</div>
+<div id="mm" class="easyui-menu" style="width:120px;">
+	<div onClick="closeTab('current')" data-options="iconCls:'icon-delete'">关闭当前页</div>
+	<div onClick="closeTab('other')" data-options="iconCls:'icon-other'">关闭其他页</div>
+	<div onClick="closeTab('all')" data-options="iconCls:'icon-all'">关闭所有页</div>
+	<div onClick="closeTab('left')" data-options="iconCls:'icon-left'">关闭左侧页</div>
+	<div onClick="closeTab('right')" data-options="iconCls:'icon-right'">关闭右侧页</div>
+</div>
+
+</body>
+
+<script type="text/javascript" th:src="@{/js/md5.js}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		// 初始化左边栏菜单
+		// 初始化静态菜单
+		// $("#if-content").attr("src", "jsp/emr/emr-cover.jsp");
+		$("#if-content").attr("src", "/welcome?v="+new Date().getTime());
+
+		initTab();
+		utils.closeLoading();
+	});
+
+	//添加标签页
+	var i = 0;
+	//初始化选项卡标签页
+	function initTab() {
+		$('#tabs').tabs({
+			onSelect: function(title, index) {
+				i = index
+			},
+			onContextMenu: function(e, title) {
+				e.preventDefault();
+				if("首页" == title) return;
+				$('#mm').menu('show', {
+					left: e.pageX,
+					top: e.pageY
+				});
+			}
+		});
+	}
+
+	// 关闭tab
+	function closeTab(param) {
+		var tab = $("#tabs").tabs("getSelected");
+		var index = $("#tabs").tabs("getTabIndex", tab);
+		var tabs = $("#tabs li");
+		if('current' == param) { //关闭当前
+			if(index != 0) {
+				$("#tabs").tabs('close', index);
+			}
+		} else if('all' == param) { //关闭所有
+			for(var i = tabs.length; i > 0; i--) {
+				$("#tabs").tabs('close', i);
+			}
+		} else if('other' == param) { //关闭其他
+			for(var i = tabs.length; i > 0; i--) {
+				if(i != index) {
+					$("#tabs").tabs('close', i);
+				}
+			}
+		} else if('left' == param) { //关闭左侧
+			for(var i = 1; i < index; i++) {
+				$("#tabs").tabs('close', i);
+				index--;
+				i--;
+			}
+			$("#tabs").tabs('select', 1);
+		} else if('right' == param) { //关闭右侧
+			for(var i = tabs.length - 1; i > index; i--) {
+				$("#tabs").tabs('close', i);
+			}
+			$("#tabs").tabs('select', index);
+		} else {
+			alert("上级调用参数错误");
+		}
+	}
+
+	function gotoFullScreen() {
+		var docElm = document.documentElement;
+		//W3C
+		if(docElm.requestFullscreen) {
+			docElm.requestFullscreen();
+		}
+		//FireFox
+		else if(docElm.mozRequestFullScreen) {
+			docElm.mozRequestFullScreen();
+		}
+		//Chrome等
+		else if(docElm.webkitRequestFullScreen) {
+			docElm.webkitRequestFullScreen();
+		}
+		//IE11
+		else if(elem.msRequestFullscreen) {
+			elem.msRequestFullscreen();
+		}
+
+		$("#exitFullScreen").show();
+		$("#gotoFullScreen").hide();
+	}
+
+	function exitFullScreen() {
+		if(document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if(document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		} else if(document.webkitCancelFullScreen) {
+			document.webkitCancelFullScreen();
+		} else if(document.msRequestExitFullscreen) {
+			document.msRequestExitFullscreen();
+		}
+
+		$("#gotoFullScreen").show();
+		$("#exitFullScreen").hide();
+	}
+
+</script>
+
+</html>

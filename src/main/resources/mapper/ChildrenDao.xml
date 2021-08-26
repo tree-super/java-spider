@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.hneb.jxetyy.dao.ChildrenDao">
+    
+    <resultMap id="childrenMap" type="net.hneb.jxetyy.entity.Children">
+        <id property="CChildId" column="C_CHILD_ID"/>
+        <result property="CUserId" column="C_USER_ID"/>
+        <result property="CChildNme" column="C_CHILD_NME"/>
+        <result property="CChildSex" column="C_CHILD_SEX"/>
+        <result property="TBirthday" column="T_BIRTHDAY"/>
+        <result property="CPrebirthMrk" column="C_PREBIRTH_MRK"/>
+        <result property="TPreBirth" column="T_PRE_BIRTH"/>
+        <result property="NConceiveWeek" column="N_CONCEIVE_WEEK"/>
+        <result property="NConceiveDay" column="N_CONCEIVE_DAY"/>
+        <result property="NBirthHeight" column="N_BIRTH_HEIGHT"/>
+        <result property="NBirthWeight" column="N_BIRTH_WEIGHT"/>
+        <result property="NBirthHead" column="N_BIRTH_HEAD"/>
+        <result property="NBirthChest" column="N_BIRTH_CHEST"/>
+        <result property="NBirthSheight" column="N_BIRTH_SHEIGHT"/>
+        <result property="CBirthStsMrk" column="C_BIRTH_STS_MRK"/>
+        <result property="CIdNo" column="C_ID_NO"/>
+        <result property="CPhone" column="C_PHONE"/>
+        <result property="CProvince" column="C_PROVINCE"/>
+        <result property="CCity" column="C_CITY"/>
+        <result property="CCrtId" column="C_CRT_ID"/>
+        <result property="TCrtTm" column="T_CRT_TM"/>
+        <result property="CUpdId" column="C_UPD_ID"/>
+        <result property="TUpdTm" column="T_UPD_TM"/>
+        <result property="CCity" column="C_CITY"/>
+        <result property="CHeadImg" column="C_HEAD_IMG"/>
+        <result property="CIll" column="C_ILL"/>
+        <result property="CLishou" column="C_LISHOU"/>
+        <result property="CEducation" column="C_EDUCATION"/>
+    </resultMap>
+
+    <select id="list" parameterType="Map" resultMap="childrenMap">
+        SELECT * FROM t_children
+        <where>
+            <include refid="net.hneb.jxetyy.dao.searchFilter" />
+        </where>
+    </select>
+
+</mapper>

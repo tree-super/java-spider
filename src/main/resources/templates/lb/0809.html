@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <title>持续注意力测试系统</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"/>
+    <th:block th:replace="common/res::res"></th:block>
+    <style type="text/css">
+        .speed {
+            margin-bottom: 30px !important
+        }
+
+        .speed ul li {
+            text-align: center;
+        }
+
+        .speed ul li label {
+            font-size: 14px;
+            line-height: 31px;
+            padding: 0 15px;
+            display: inline-block;
+            cursor: pointer
+        }
+
+        .speed ul li label input[type=radio] {
+            width: 18px;
+            height: 18px;
+            margin-top: -3px;
+            margin-right: 6px
+        }
+
+        .showNumber {
+            width: 100%;
+            height: 262px;
+            font-size: 0;
+            text-align: center;
+        }
+
+        .showNumber .txtNumber, .showNumber .soundNumber {
+            width: 360px;
+            height: 260px;
+            border: solid 1px #999;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .showNumber .txtNumber {
+            font: 70px/260px "Arial";
+        }
+
+        .showNumber .soundNumber {
+            line-height: 260px;
+        }
+
+        .showNumber .soundNumber .icon-sound {
+            font-size: 80px;
+        }
+
+        .divTips {
+            font: 16px "SegoeUI", "Microsoft YaHei", "Hiragino Sans GB";
+            text-align: center;
+            margin: 20px 0
+        }
+
+        .pattern {
+            margin-bottom: 20px;
+        }
+
+        .pattern li {
+            text-align: center;
+        }
+
+        .pattern li label {
+            font-size: 14px;
+            line-height: 31px;
+            padding: 0 15px;
+            display: inline-block;
+            cursor: pointer
+        }
+
+        .pattern li label input[type=radio] {
+            width: 18px;
+            height: 18px;
+            margin-top: -3px;
+            margin-right: 6px
+        }
+
+        .divBtn {
+            text-align: center;
+        }
+
+        .divBtn .btnBlock {
+            width: 60px;
+            height: 90px;
+            display: inline-block;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .btnBlock .iconfont {
+            padding: 10px;
+            font-size: 40px;
+            line-height: 60px;
+            background: #0063b1;
+            color: #fff;
+        }
+
+        .btnBlock .normalfont {
+            font-size: 18px;
+            line-height: 30px;
+        }
+
+        .divBtn .btnBlock:active {
+            opacity: 0.8;
+            filter: alpha(Opacity=80)
+        }
+
+        .notClickn {
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<input type="hidden" id="printFormId" value="f1">
+<div class="questionnaire">
+    <!--问卷左边-->
+    <div class="questionnaire-left">
+        <div class="questionnaire-tit">
+            <h4></h4>
+            <i class="ui-help noprint">帮助</i>
+        </div>
+        <div class="children-info">
+            <h4>基础信息</h4>
+            <form id="basic">
+                    <input type="hidden" name="CLbId" value="0809"/>
+                    <input type="hidden" name="CPkId"/>
+                    <input type="hidden" name="CPkgId"/><!-- 套餐id -->
+                    <input type="hidden" name="CParentId"/>
+                    <input type="hidden" name="CChildId"/>
+                    <input type="hidden" name="CUserId"/>
+                    <input type="hidden" name="NYear"/>
+                    <input type="hidden" name="NMonth"/>
+                    <input type="hidden" name="NDay"/>
+                    <input type="hidden" name="COrgPkId"/>
+                    <input type="hidden" name="NSeqNum"/>
+                    <input type="hidden" name="CFormId" value="f2"/><!-- 默认显示第一个form -->
+                    <input type="hidden" name="CExt1" id="CExt1"/>
+                    <input type="hidden" name="CExt2" id="CExt2"/>
+                    <input type="hidden" name="CExt3" id="CExt3"/>
+                    <input type="hidden" name="hiddenNum" id="hiddenNum"/>
+                <ul class="clear">
+                    <li class="col3">
+                        <em>
+                            <span class="red-required">*</span>
+                            联系手机&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CPhoneNo" class="easyui-validatebox"
+                                                                data-options="required:true,validType:'isPhoneNo'"/>
+                        </div>
+                        <div class="ui-opt noprint" id="clearBasicInfo">清除</div>
+                        <!--关联手机号下拉 -->
+                        <div class="drop-down-box" id="phoneDown">
+                            <div class="drop-down">
+                                <div class="drop-down-div clear"></div>
+                                <i class="iconfont icon-uiclose" onclick="dropDownClose()"></i>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col3">
+                        <em>
+                            <span class="red-required">*</span>
+                            姓名&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CChildNme" class="easyui-validatebox"
+                                                                data-options="required:true"/></div>
+                        <div class="ui-opt noprint" id="arch" style="display:none">查看</div>
+                    </li>
+                    <li class="col3">
+                        <em>
+                            <span class="red-required">*</span>
+                            性别&nbsp;</em>
+                        <div class="children-info-input">
+                            <!-- jeasyui的api使用必须使用id CChildSex不能去掉 -->
+                            <select id="CChildSex" name="CChildSex" class="easyui-combobox" data-options="editable:false,required:true">
+                                <option value="M">男</option>
+                                <option value="F">女</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="col2">
+                        <em>
+                            <span class="red-required">*</span>
+                            出生日期&nbsp;</em>
+                        <!-- jeasyui的api使用必须使用id TBirthday不能去掉 -->
+                        <div class="children-info-input">
+                            <input type="text" id="TBirthday" name="TBirthday" class="easyui-datebox" data-options="editable:false,validType:['isDate'],required:true"/>
+                        </div>
+                    </li>
+                    <li class="col2">
+                        <em>门诊/住院号&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CMenzhenNo"/></div>
+                    </li>
+                    <li class="col2">
+                        <em>信息提供者&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CInfoOffer"/></div>
+                    </li>
+                    <li class="col2">
+                        <em>与儿童的关系&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CChildRel"/></div>
+                        <div class="ui-opt noprint" id="reltips">选择</div>
+                    </li>
+                    <li>
+                        <em>特殊病史&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CIllHistory" ills=""
+                                                                placeholder="多种疾病请用空格隔开"/></div>
+                        <div class="ui-opt" id="illTips" style="display:none">选择</div>
+                    </li>
+                    <li class="col2">
+                        <em>
+                            <span class="red-required">*</span>
+                            录入人&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CExecutor" class="easyui-validatebox"
+                                                                data-options="required:true"/></div>
+                        <div class="ui-opt noprint" id="executortips">选择</div>
+                    </li>
+                    <li class="col2">
+                        <em>
+                            <span class="red-required">*</span>
+                            申请医生&nbsp;</em>
+                        <div class="children-info-input"><input type="text" name="CDoctor" class="easyui-validatebox"
+                                                                data-options="required:true"/></div>
+                        <div class="ui-opt noprint" id="doctortips">选择</div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+        <div class="children-info speed">
+            <h4>模式选择</h4>
+            <ul class="clear">
+                <li class="col1">
+                    <label><input type="radio" value="0" name="pattern"/>视觉模式</label>
+                    <label><input type="radio" value="1" name="pattern"/>听觉模式</label>
+                    <label><input type="radio" value="2" name="pattern" checked="checked"/>视听混合</label>
+                </li>
+            </ul>
+        </div>
+        <!--表格模式-->
+        <div class="subject" style="display: none"></div>
+        <!--答题模式-->
+        <div class="subject each-question" style="display:none;" id="answer">
+            <form id="f2">
+                <ul class="pattern clear">
+                    <li class="col1">
+                        <label><input name="type" type="radio" value="0" checked/>练习</label>
+                        <label><input name="type" type="radio" value="1"/>测试</label>
+                    </li>
+                </ul>
+                <div class="showNumber">
+                    <div class="txtNumber"><span style="font: 70px/260px 'Arial'" id="num"></span></div>
+                    <div class="soundNumber">
+                        <span class="iconfont icon-sound"></span>
+                        <div class="sound-img"></div>
+                    </div>
+                </div>
+                <div class="divTips" id="divTips"></div>
+                <div class="divBtn">
+                    <div class="btnBlock" id="start" onclick="choose();">
+                        <span class="iconfont icon-shouzhi"></span>
+                        <span class="normalfont">开&nbsp;始</span>
+                    </div>
+                    <div class="btnBlock">
+                        <span class="iconfont icon-zhongping" id="face"></span>
+                        <span class="normalfont">&nbsp;</span>
+                    </div>
+                    <div class="btnBlock" id="over" onclick="over();">
+                        <span class="iconfont icon-tuichu"></span>
+                        <span class="normalfont">退&nbsp;出</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--答题卡模式-->
+        <div class="subject answer-sheet" style="display:none;"></div>
+        <!--答题提交保存按钮-->
+        <div class="ui-btn noprint">
+            <!-- <a href="javascript:void(0)" id="prevBtn" onClick="prevPage()">
+                <em class="iconfont icon-jiantou-left"></em>
+                <i>上一步</i>
+            </a> -->
+            <a href="javascript:void(0)" id="nextBtn" onClick="nextPage();">
+                <em class="iconfont icon-jiantou-right1"></em>
+                <i>下一步</i>
+            </a>
+        </div>
+        <dd id="audio">
+            <audio id="audio0" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_0.mp3"></audio>
+            <audio id="audio1" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_1.mp3"></audio>
+            <audio id="audio2" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_2.mp3"></audio>
+            <audio id="audio3" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_3.mp3"></audio>
+            <audio id="audio4" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_4.mp3"></audio>
+            <audio id="audio5" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_5.mp3"></audio>
+            <audio id="audio6" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_6.mp3"></audio>
+            <audio id="audio7" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_7.mp3"></audio>
+            <audio id="audio8" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_8.mp3"></audio>
+            <audio id="audio9" src="http://sysdata.qiniu.hneb.net/lbpc/0809/audio/lbpc_0809_audio_9.mp3"></audio>
+        </dd>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/lb/common.js}"></script>
+<script type="text/javascript">
+
+
+    //试用数组
+    var trial = [];
+    //创建答题数组
+    var question = [];
+    //测试中数字间隔时间
+    var interval;
+    //报告各节点数据
+    var zq = 0, cw = 0, lb = 0, zs = 0;
+    //结果集合（数组包JSon）
+    var result = [];
+    //答题模式
+    var type;
+    //定时器全局变量
+    var timeOut = [];
+    //数字是否变化标记
+    var isChange;
+    //当前测试模式
+    var val;
+    //测试和练习的radio
+    var input = $('#answer').find('input:radio');
+    //开始时间、结束时间
+    var startdate,enddate;
+    //反应时间数组
+    var reaction = [];
+    //平均反应时间
+    let averageReaction = 0;
+
+
+    $(document).ready(function () {
+        var divLeftWidth = $('.questionnaire-left').width();
+        $(".ui-btn").css('width', divLeftWidth - 17);
+        initCommon();
+        initData();
+        utils.closeLoading();
+        utils.initDataGrid();
+
+
+    });
+
+    function choose() {
+        val = $('input[name=\'type\']:checked').val();
+        if (val == 0) {
+            starttrial();
+        } else if (val == 1) {
+            start();
+        }
+    }
+
+    function over() {
+        $.messager.alert('系统提示', '测试时间还没有结束，确定要结束答题吗？', 'info', function () {
+            parent.closeTab('current');
+        });
+        // val = $('input[name=\'type\']:checked').val();
+        // if (val == 0) {
+        //     $.messager.alert('系统提示', '练习结束，点击确定开始正式答题',
+        //         'info', function () {
+        //             for (let i = 0; i < timeOut.length; i++) {
+        //                 clearTimeout(timeOut[i]);
+        //
+        //             }
+        //             //取消键盘事件
+        //             $(document).unbind('keydown');
+        //             $(document).unbind('keyup');
+        //             //重新打开开始按钮
+        //             $('#start').removeClass('notClickn');
+        //             $('#over').show();
+        //             //重新打开radio
+        //             input.attr('disabled', false);
+        //             $("input[name='type']:eq(1)").prop("checked", 'checked');
+        //         });
+        // } else if (val == 1) {
+        //     $.messager.alert('系统提示', '测试时间还没有结束，确定要结束答题吗？',
+        //         'info', function () {
+        //             for (let i = 0; i < timeOut.length; i++) {
+        //                 clearTimeout(timeOut[i]);
+        //
+        //             }
+        //             //循环结束时提交报告
+        //             $.messager.alert('系统提示', '答题结束，点击确认生成报告',
+        //                 'info', function () {
+        //                     //取消键盘事件
+        //                     $(document).unbind('keydown');
+        //                     $(document).unbind('keyup');
+        //                     //重新打开开始按钮
+        //                     $('#start').removeClass('notClickn');
+        //                     $('#over').show();
+        //                     //重新打开radio
+        //                     input.attr('disabled', false);
+        //                     //分段结果集存入
+        //                     var row = {"zq": zq, "cw": cw, "lb": lb, "zs": zs};
+        //                     var strrow = JSON.stringify(row);
+        //                     result.push(strrow);
+        //                     $("#CExt1").val('[' + result + ']');
+        //                     submit();
+        //                 });
+        //         });
+        // }
+    }
+
+    var showNum=[1, 2, 4, 5, 6, 7, 8];
+
+    function starttrial() {
+        //禁用radio
+        input.attr('disabled', 'disabled');
+        //关闭开始按钮
+        $('#start').addClass('notClickn');
+        // $('#over').hide();
+        //取消checked
+        $("input[name='type']:eq(1)").prop('checked', false);
+        //当节点开始时数据清零
+        zq = 0;
+        cw = 0;
+        lb = 0;
+        zs = 0;
+        //绑定空格键
+        $(document).keydown(function (e) {
+            e = e || window.event;
+            if (e.keyCode == 32)  //按键 ASCII 码值
+            {
+                $('#face').removeClass('icon-zhongping');
+                $('#face').addClass('icon-haoping');
+                var value = $("#hiddenNum").val();
+                console.log("value=" + value);
+                if (value == 3) {
+                    if (isChange == 1) {
+                        zq++;
+                        //累加后数字未改变状态
+                        isChange = 0;
+                    }
+                } else {
+                    cw++;
+                }
+            } else {
+                event.returnValue = false;
+                return false;
+            }
+        });
+        $(document).keyup(function (e) {
+            e = e || window.event;
+            if (e.keyCode == 32)  //按键 ASCII 码值
+            {
+                $('#face').removeClass('icon-haoping');
+                $('#face').addClass('icon-zhongping');
+            }
+        });
+
+        for (var i = 0; i < trial.length; i++) {
+            (function (i) {
+                timeOut[i] = setTimeout(function () {
+                    //显示字符
+                    if(type==2&&trial[i] == 3){
+                        var x = 6;//上限
+                        var y = 0; //下限
+                        var rand = parseInt(Math.random() * (x - y + 1) + y);
+                        $("#hiddenNum").val(trial[i]);
+                        $("#num").html(showNum[rand]);
+                        $("#num").show();
+                        if(i%2 ==0){
+                            $("#audio" + (showNum[rand]+1))[0].play();
+                        }else {
+                            $("#audio" + (showNum[rand]-1))[0].play();
+                        }
+                    }else {
+                        $("#num").html(trial[i]);
+                        $("#hiddenNum").val(trial[i]);
+                        $("#num").show();
+                        //播放音频
+                        if (type != 0) {
+                            $("#audio" + trial[i])[0].play();
+                        }
+                    }
+                    //数字刷新后转变成已改变状态
+                    isChange = 1;
+                    //当数字等于3时累计总数
+                    if (trial[i] == 3) {
+                        zs++;
+                    }
+                    //计算一分钟内数字出现的次数
+                    var times = 60 / interval;
+                    //统计分段固定为2分钟
+                    if (i == times * 2 - 1) {
+                        //漏报数等于总数减去正确数
+                        lb = zs - zq;
+                        $.messager.alert('系统提示', '您的测试结果为：正确=' + zq + ';错误=' + cw + ';漏报=' + lb + ';总数=' + zs + '，点击确定开始正式测试',
+                            'info', function () {
+                                //取消键盘事件
+                                $(document).unbind('keydown');
+                                $(document).unbind('keyup');
+                                //当节点开始时数据清零
+                                zq = 0;
+                                cw = 0;
+                                lb = 0;
+                                zs = 0;
+                                 start();
+                                $("input[name='type']:eq(1)").prop("checked", 'checked');
+                            });
+
+                    }
+                   console.log("正确=" + zq);
+                   console.log("错误=" + cw);
+                   console.log("漏报=" + lb);
+                   console.log("总数=" + zs);
+                   console.log("i=" + i);
+                    // 数字显示0.1秒后消失
+                    setTimeout(function () {
+                        $("#num").hide();
+                    }, 100);
+                }, i * interval * 1000);
+            })(i);
+        }
+    }
+    function start() {
+        console.log("start.....;");
+        submit();
+        return;
+    }
+
+    function start2() {
+        submit();
+        return;
+        //禁用radio
+        input.attr('disabled', 'disabled');
+        //关闭开始按钮
+        $('#start').addClass('notClickn');
+        // $('#over').hide();
+        val = $('input[name=\'type\']:checked').val();
+        //当节点开始时数据清零
+        zq = 0;
+        cw = 0;
+        lb = 0;
+        zs = 0;
+        reaction = [];
+        //绑定空格键
+        $(document).keydown(function (e) {
+            e = e || window.event;
+            if (e.keyCode == 32)  //按键 ASCII 码值
+            {
+                $('#face').removeClass('icon-zhongping');
+                $('#face').addClass('icon-haoping');
+                var value = $("#hiddenNum").val();
+                console.log("value=" + value);
+                if (value == 3) {
+                    if (isChange == 1) {
+                        zq++;
+                        //累加后数字未改变状态
+                        isChange = 0;
+                        //计算反应时间
+                        enddate = new Date();
+                        reaction.push(calculateTime(enddate, startdate));
+                    }
+                } else {
+                    cw++;
+                    //计算反应时间
+                    enddate = new Date();
+                    reaction.push(calculateTime(enddate, startdate));
+                }
+            } else {
+                event.returnValue = false;
+                return false;
+            }
+        });
+        $(document).keyup(function (e) {
+            e = e || window.event;
+            if (e.keyCode == 32)  //按键 ASCII 码值
+            {
+                $('#face').removeClass('icon-haoping');
+                $('#face').addClass('icon-zhongping');
+            }
+        });
+        for (var i = 0; i < question.length; i++) {
+            (function (i) {
+                timeOut[i] = setTimeout(function () {
+                    //开启计时
+                    startdate = new Date();
+                    //显示字符
+                    if(type==2&&question[i] == 3){
+                        var x = 6;//上限
+                        var y = 0; //下限
+                        var rand = parseInt(Math.random() * (x - y + 1) + y);
+                        $("#hiddenNum").val(question[i]);
+                        $("#num").html(showNum[rand]);
+                        $("#num").show();
+                        if(i%2 ==0){
+                            $("#audio" + (showNum[rand]+1))[0].play();
+                        }else {
+                            $("#audio" + (showNum[rand]-1))[0].play();
+                        }
+                    }else {
+                        $("#num").html(question[i]);
+                        $("#hiddenNum").val(question[i]);
+                        $("#num").show();
+                        //播放音频
+                        if (type != 0) {
+                            $("#audio" + question[i])[0].play();
+                        }
+                    }
+                    //数字刷新后转变成已改变状态
+                    isChange = 1;
+                    //当数字等于3时累计总数
+                    if (question[i] == 3) {
+                        zs++;
+                    }
+                    //计算一分钟内数字出现的次数
+                    var times = 60 / interval;
+                    //统计分段固定为2分钟
+                    if (i == question.length - 1) {
+                        //计算平均反应时间
+                        let sum=0;
+                        for(let j =0;j<reaction.length;j++){
+                            sum+=reaction[j];
+                        }
+                        averageReaction=sum/reaction.length;
+                        //漏报数等于总数减去正确数
+                        lb = zs - zq;
+                        //分段结果集存入
+                        var row = {"zq": zq, "cw": cw, "lb": lb, "zs": zs};
+                        var strrow = JSON.stringify(row);
+                        result.push(strrow);
+                        //当节点开始时数据清零
+                        zq = 0;
+                        cw = 0;
+                        lb = 0;
+                        zs = 0;
+                        //循环结束时提交报告
+                        $.messager.alert('系统提示', '答题结束，点击确认生成报告',
+                            'info', function () {
+                                $("#CExt1").val('['+result+']');
+                                $("#CExt2").val(isNaN(averageReaction)?1500:averageReaction);
+                                $("#CExt3").val($("input[name='pattern']:checked").val());
+                                submit();
+                            });
+                    } else if ((i + 1) % (times * 2) == 0) {
+                        //漏报数等于总数减去正确数
+                        lb = zs - zq;
+                        //分段结果集存入
+                        var row = {"zq": zq, "cw": cw, "lb": lb, "zs": zs};
+                        var strrow = JSON.stringify(row);
+                        result.push(strrow);
+                        //当节点开始时数据清零
+                        zq = 0;
+                        cw = 0;
+                        lb = 0;
+                        zs = 0;
+                    }
+                   console.log("正确=" + zq);
+                   console.log("错误=" + cw);
+                   console.log("漏报=" + lb);
+                   console.log("总数=" + zs);
+                   console.log("i=" + i);
+                   console.log("averageReaction=" + averageReaction);
+                    //数字显示0.1秒后消失
+                    setTimeout(function () {
+                        $("#num").hide();
+                    }, 100);
+                }, i * interval * 1000);
+            })(i);
+        }
+    }
+
+    //计算时间差（毫秒）
+    function calculateTime(begindate, enddate) {
+
+        // 时间格式化
+        var _begindate = Date.parse(new Date(begindate.toString().replace(/-/g, "/")));
+        var _enddate = Date.parse(new Date(enddate.toString().replace(/-/g, "/")));
+
+        // 计算时间差
+        var _MS = _begindate - _enddate;
+        return _MS;
+    }
+
+    //点击下一步按钮
+    function nextPage() {
+        //TODO:校验
+        // 当前显示的formId
+        var formId = $("div.questionnaire-right").find("li.current").eq(0).attr("formId");
+        var mrk11 = utils.validate([formId]);
+        var mrk12 = $("#" + formId).form("enableValidation").form("validate");
+        var mrk1 = mrk11 && mrk12;
+
+        var mrk21 = utils.validate(["basic"]);
+        var mrk22 = $("#basic").form("enableValidation").form("validate");
+        var mrk2 = mrk21 && mrk22;
+
+        // 校验不通过提示
+        if (!mrk2 || !mrk1) {
+            //找到所有easyui校验不通过的样式，查看其上级是否有msgTips的样式，如果有则需要自己变成红色必输
+            $("input[class='easyui-validatebox validatebox-text validatebox-invalid']").parents(".msgTips_").addClass("tips-err");
+            utils.alert("必填项不能为空");
+            return false;
+        }
+        //隐藏下一步按钮
+        $("#nextBtn").hide();
+        //隐藏基础信息和速度选择
+        $(".children-info").hide();
+        //显示数字块DIV
+        $(".each-question").show();
+        //显示开始按钮
+        $("#start").show();
+        $("#over").show();
+        //显示提示文字
+        $(".divTips").show();
+        //隐藏右边
+        $(".questionnaire-right").hide();
+        //获取类型的val并赋值给全局变量type
+        type = $("input[name='pattern']:checked").val();
+        //调用显示的模式
+        showDiv();
+        //给间隔时间赋值(s)
+        interval = 1.5;
+        //创建答题数组
+        //元数据
+        let metadata = [0, 1, 2, 4, 5, 6, 7, 8, 9];
+        //3的插入序列
+        let sequence = [];
+        //创建答题数组
+        //分段数组（2分钟）
+        var questPart = [];
+        //倍数（2分钟）
+        var multiple = 6;
+        for (var i = 1; i <= multiple; i++) {
+            for (let i = 0; i < 16; i++) {
+                sequence[i] = Math.floor(Math.random() * 79)
+            }
+            for (let i = 0; i < 80; i++) {
+                //下标是否在插入序列中
+                if ($.inArray(i, sequence) == -1) {
+                    let num = metadata.splice(Math.random() * 9, 1);
+                    if (metadata.length < 9) {
+                        metadata.push(num[0]);
+                    }
+                    questPart[i] = num[0];
+                } else {
+                    questPart[i] = 3;
+                }
+            }
+            question = question.concat(questPart);
+        }
+       // console.log(question);
+        //试用数组
+        for (let i = 0; i < 16; i++) {
+            sequence[i] = Math.floor(Math.random() * 79)
+        }
+        for (let i = 0; i < 80; i++) {
+            //下标是否在插入序列中
+            if ($.inArray(i, sequence) == -1) {
+                let num = metadata.splice(Math.random() * 9, 1);
+                if (metadata.length < 9) {
+                    metadata.push(num[0]);
+                }
+                trial[i] = num[0];
+            } else {
+                trial[i] = 3;
+            }
+        }
+        // for (var i = 0; i < 2 * 60 / interval; i++) {
+        //     trial[i] = Math.floor(Math.random() * 10);
+        // }
+        // utils.alert('测试之前有两分钟的试用练习，之后会进行正式测试');
+        if(type==0){
+            $("#divTips").html("请在上面框出现数字3的时候迅速按下空格");
+        }else if(type==1){
+            $("#divTips").html("请听到数字3的时候迅速按下空格");
+        }else if(type==2){
+            $("#divTips").html("请在上面框出现数字和播放音频不一致时迅速按下空格");
+        }
+    }
+
+    function showDiv() {
+        if (type == "0") {
+            $(".txtNumber").show();
+            $(".soundNumber").hide()
+        } else if (type == "1") {
+            $(".txtNumber").hide();
+            $(".soundNumber").show()
+        } else if (type == "2") {
+            $(".txtNumber").show();
+            $(".soundNumber").hide()
+            $(".showNumber div").css("width", "260px");
+        }
+    }
+</script>
+</body>
+</html>

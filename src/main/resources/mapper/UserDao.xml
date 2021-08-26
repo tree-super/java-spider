@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.hneb.jxetyy.dao.UserDao">
+    
+    <resultMap id="userMap" type="net.hneb.jxetyy.entity.User">
+        <id property="CUserId" column="C_USER_ID"/>
+        <result property="tenantId" column="tenant_id"/>
+        <result property="loginCode" column="LOGIN_CODE"/>
+        <result property="loginAlias" column="LOGIN_ALIAS"/>
+        <result property="email" column="EMAIL"/>
+        <result property="CPhoneNo" column="C_PHONE_NO"/>
+        <result property="CUserNme" column="C_USER_NME"/>
+        <result property="CPassword" column="C_PASSWORD"/>
+        <result property="CRole" column="C_ROLE"/>
+        <result property="userStatus" column="USER_STATUS"/>
+        <result property="CDataSrc" column="C_DATA_SRC"/>
+        <result property="CWxId" column="C_WX_ID"/>
+        <result property="CUnionId" column="C_UNION_ID"/>
+        <result property="CId2" column="C_ID2"/>
+        <result property="CUserIconUrl" column="C_USER_ICON_URL"/>
+        <result property="CSign" column="C_SIGN"/>
+        <result property="CDptId" column="C_DPT_ID"/>
+        <result property="NFansNum" column="N_FANS_NUM"/>
+        <result property="NZanNum" column="N_ZAN_NUM"/>
+        <result property="CWxQrcodeUrl" column="C_WX_QRCODE_URL"/>
+        <result property="CWxQrcodeUrl2" column="C_WX_QRCODE_URL2"/>
+        <result property="CSubscribeMrk" column="C_SUBSCRIBE_MRK"/>
+        <result property="CPro" column="C_PRO"/>
+        <result property="CCity" column="C_CITY"/>
+        <result property="deleted" column="DELETED"/>
+        <result property="CZone" column="C_ZONE"/>
+        <result property="CCrtId" column="C_CRT_ID"/>
+        <result property="TCrtTm" column="T_CRT_TM"/>
+        <result property="CUpdId" column="C_UPD_ID"/>
+        <result property="TUpdTm" column="T_UPD_TM"/>
+    </resultMap>
+
+    <select id="list" parameterType="Map" resultMap="userMap">
+        select * from t_user
+        <where>
+            <include refid="net.hneb.jxetyy.dao.searchFilter" />
+        </where>
+    </select>
+
+</mapper>

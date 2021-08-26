@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.hneb.jxetyy.dao.LbpcReportDao">
+    
+    <resultMap id="LbpcReportMap" type="net.hneb.jxetyy.entity.LbpcReport">
+        <id property="CPkId" column="C_PK_ID"/>
+        <result property="COrgPkId" column="C_ORG_PK_ID"/>
+        <result property="CPkgId" column="C_PKG_ID"/>
+        <result property="CSvcPkgId" column="C_SVC_PKG_ID"/>
+        <result property="NSeqNum" column="N_SEQ_NUM"/>
+        <result property="CLbId" column="C_LB_ID"/>
+        <result property="CChildId" column="C_CHILD_ID"/>
+        <result property="CParentId" column="C_PARENT_ID"/>
+        <result property="CChildNme" column="C_CHILD_NME"/>
+        <result property="CChildSex" column="C_CHILD_SEX"/>
+        <result property="TBirthday" column="T_BIRTHDAY"/>
+        <result property="CPhoneNo" column="C_PHONE_NO"/>
+        <result property="NYear" column="N_YEAR"/>
+        <result property="NMonth" column="N_MONTH"/>
+        <result property="NDay" column="N_DAY"/>
+        <result property="NConceiveWeek" column="N_CONCEIVE_WEEK"/>
+        <result property="NConceiveDay" column="N_CONCEIVE_DAY"/>
+        <result property="TPreBirth" column="T_PRE_BIRTH"/>
+        <result property="NYear1" column="N_YEAR1"/>
+        <result property="NMonth1" column="N_MONTH1"/>
+        <result property="NDay1" column="N_DAY1"/>
+        <result property="NBirthHeight" column="N_BIRTH_HEIGHT"/>
+        <result property="NBirthWeight" column="N_BIRTH_WEIGHT"/>
+        <result property="NBirthChest" column="N_BIRTH_CHEST"/>
+        <result property="NBirthSheight" column="N_BIRTH_SHEIGHT"/>
+        <result property="NBirthHead" column="N_BIRTH_HEAD"/>
+        <result property="CDptId" column="C_DPT_ID"/>
+        <result property="COfficeId" column="C_OFFICE_ID"/>
+        <result property="CExecutor" column="C_EXECUTOR"/>
+        <result property="CDoctor" column="C_DOCTOR"/>
+        <result property="CInfoOffer" column="C_INFO_OFFER"/>
+        <result property="TTestTm" column="T_TEST_TM"/>
+        <result property="CMenzhenNo" column="C_MENZHEN_NO"/>
+        <result property="CChildRel" column="C_CHILD_REL"/>
+        <result property="CIllHistory" column="C_ILL_HISTORY"/>
+        <result property="CEffMrk" column="C_EFF_MRK"/>
+        <result property="CSchool" column="C_SCHOOL"/>
+        <result property="CClazz" column="C_CLAZZ"/>
+        <result property="CGrade" column="C_GRADE"/>
+        <result property="TCrtTm" column="T_CRT_TM"/>
+        <result property="CCrtId" column="C_CRT_ID"/>
+        <result property="TUpdTm" column="T_UPD_TM"/>
+        <result property="CUpdId" column="C_UPD_ID"/>
+        <result property="CExt1" column="C_EXT1"/>
+        <result property="CExt2" column="C_EXT2"/>
+        <result property="CExt3" column="C_EXT3"/>
+        <result property="CExt4" column="C_EXT4"/>
+        <result property="CExt5" column="C_EXT5"/>
+        <result property="CAns1" column="C_ANS_1"/>
+        <result property="CAns2" column="C_ANS_2"/>
+        <result property="CAns3" column="C_ANS_3"/>
+        <result property="CAns4" column="C_ANS_4"/>
+        <result property="CAns5" column="C_ANS_5"/>
+        <result property="CAns6" column="C_ANS_6"/>
+        <result property="CAns7" column="C_ANS_7"/>
+        <result property="CAns8" column="C_ANS_8"/>
+        <result property="CAns9" column="C_ANS_9"/>
+        <result property="CAns10" column="C_ANS_10"/>
+        <result property="CAns11" column="C_ANS_11"/>
+        <result property="CAns12" column="C_ANS_12"/>
+        <result property="CAns13" column="C_ANS_13"/>
+        <result property="CAns14" column="C_ANS_14"/>
+        <result property="CAns15" column="C_ANS_15"/>
+    </resultMap>
+
+    <select id="list" parameterType="Map" resultMap="LbpcReportMap">
+        select * from t_lbpc_report
+        <where>
+            <include refid="net.hneb.jxetyy.dao.searchFilter" />
+        </where>
+    </select>
+
+    <select id="findOne" parameterType="string" resultMap="LbpcReportMap">
+        SELECT C_PK_ID,C_CHILD_ID FROM t_lbpc_report
+        WHERE C_PK_ID = #{id};
+    </select>
+
+</mapper>
