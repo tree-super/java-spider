@@ -1,0 +1,39 @@
+# maven
+.mvn
+mvnw
+mvnw.cmd
+
+*.class
+classes/
+*.log
+*/src/test
+*Servers/
+
+# logs
+weblogs/
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# IntelliJ IDEA Files
+*.iml
+*.ipr
+*.iws
+*.idea
+target
+overlays
+
+# eclipse
+*.project
+*.settings/
+*.classpath
+*.metadata/
+
