@@ -38,8 +38,8 @@ public class ReportController {
     @RequestMapping(value = {"/report/getLbpcReport" })
     @ResponseBody
     public JSONObject reportDetail(HttpServletRequest request){
-        JSONObject custData = HnebRequestUtils.getRequestCustData(request);
-        String pkId = custData.getString("pkId");
+        JSONObject custDataReq = HnebRequestUtils.getRequestCustData(request);
+        String pkId = custDataReq.getString("pkId");
         JSONObject json = reportService.getLbpcReport(pkId);
         JSONArray bizJsonData = new JSONArray();
         bizJsonData.add(HnebRequestUtils.getBizData("basic", (JSONObject) json.get("basic")));

@@ -16,7 +16,7 @@ function initReport() {
 }
 
 //获取数据
-function initData() {
+function initLbpcReport() {
     var pkId = utils.getParam("pkId");
     utils.ajax({
         control: "report/getLbpcReport",
@@ -31,12 +31,8 @@ function initData() {
 
             //初始化表头的量表名字
             $("#lbNme").html(cd.lbNme);
-            try {
-                //调用每个具体页面的方法，执行个性化的页面渲染
-                showPage(mrk, bd, cd);
-            } catch (e) {
-//                console.log("Error:===>" + e);
-            }
+            //调用每个具体页面的方法，执行个性化的页面渲染
+            showPage(mrk, bd, cd);
 
             if (cd.formData.CEffMrk == '0') {
                 var obsolete = "<div class='void-icon'><img src='res/images/obsolete.png'></div>";

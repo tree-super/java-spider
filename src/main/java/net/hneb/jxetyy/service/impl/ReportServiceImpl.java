@@ -3,6 +3,7 @@ package net.hneb.jxetyy.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.util.TypeUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.hneb.jxetyy.common.mapper.SearchFilters;
 import net.hneb.jxetyy.dao.BasNormDao;
@@ -16,7 +17,6 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +32,9 @@ public class ReportServiceImpl implements ReportService {
 
     private static HashMap<Double, Double> bfwMap = new HashMap<>(61);
     static {
+
+        TypeUtils.compatibleWithJavaBean = true;
+
         bfwMap.put(-3.0, 0.13);
         bfwMap.put(-2.9, 0.19);
         bfwMap.put(-2.8, 0.26);
@@ -204,7 +207,7 @@ public class ReportServiceImpl implements ReportService {
         basicJson.put("CGrade", report.getCGrade());
 
         basicJson.put("CChildNme", report.getCChildNme());
-//        basicJson.put("CChildSex", report.getCChildSex());
+        basicJson.put("CChildSex", report.getCChildSex());
         basicJson.put("TBirthday", report.getTBirthday());
         basicJson.put("TPreBirth", report.getTPreBirth());
         basicJson.put("NBirthHeight", report.getNBirthHeight());

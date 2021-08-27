@@ -160,7 +160,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         initReport();
-        initData();
+        initLbpcReport();
         utils.closeLoading();
     });
 
@@ -168,14 +168,15 @@
     var lbcount = 0;
 
     function showPage(mrk, bd, cd) {
-        var year = cd.formData["NYear"];
-        var month = cd.formData["NMonth"];
-        var day = cd.formData["NDay"];
+        var year = cd["formData"]["NYear"];
+        var month = cd["formData"]["NMonth"];
+        var day = cd["formData"]["NDay"];
         var months = year * 12 + month;
         for (var i = 1; i <= 8; i++) {
-            $("span[name='CAns" + i + "']").html(cd.formData["CAns" + i]);
+            $("span[name='CAns" + i + "']").html(cd["formData"]["CAns" + i]);
         }
-        var CExt1 = cd.formData["CExt1"];
+        var CExt1Str = cd["formData"]["CExt1"];
+        var CExt1 = $.parseJSON(CExt1Str);
         var example = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
         var cwy = [0];
         var lby = [0];
@@ -201,18 +202,18 @@
         chart2(x, lby);
         $("#lbcount").html(lbcount);
         $("#cwcount").html(cwcount);
-        $("#cwT").html(cd.formData["CAns4"]);
-        $("span[name='cwBfw']").html(cd.formData["CAns1"]);
-        $("#100cwBfw").html((100-parseFloat(cd.formData["CAns1"])).toFixed(2));
-        $("#lbT").html(cd.formData["CAns5"]);
-        $("span[name='lbBfw']").html(cd.formData["CAns2"]);
-        $("#100lbBfw").html((100-parseFloat(cd.formData["CAns2"])).toFixed(2));
-        $("#reactionTime").html(cd.formData["CAns11"]);
-        $("#rtT").html(cd.formData["CAns6"]);
-        $("span[name='rtBfw']").html(cd.formData["CAns3"]);
-        $("#100rtBfw").html((100-parseFloat(cd.formData["CAns3"])).toFixed(2));
-        $("#result1").html(cd.formData["CAns7"]);
-        $("#result2").html(cd.formData["CAns8"]);
+        $("#cwT").html(cd["formData"]["CAns4"]);
+        $("span[name='cwBfw']").html(cd["formData"]["CAns1"]);
+        $("#100cwBfw").html((100-parseFloat(cd["formData"]["CAns1"])).toFixed(2));
+        $("#lbT").html(cd["formData"]["CAns5"]);
+        $("span[name='lbBfw']").html(cd["formData"]["CAns2"]);
+        $("#100lbBfw").html((100-parseFloat(cd["formData"]["CAns2"])).toFixed(2));
+        $("#reactionTime").html(cd["formData"]["CAns11"]);
+        $("#rtT").html(cd["formData"]["CAns6"]);
+        $("span[name='rtBfw']").html(cd["formData"]["CAns3"]);
+        $("#100rtBfw").html((100-parseFloat(cd["formData"]["CAns3"])).toFixed(2));
+        $("#result1").html(cd["formData"]["CAns7"]);
+        $("#result2").html(cd["formData"]["CAns8"]);
 
     }
 

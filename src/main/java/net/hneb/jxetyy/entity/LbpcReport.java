@@ -1,5 +1,7 @@
 package net.hneb.jxetyy.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.util.TypeUtils;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -16,10 +18,9 @@ public class LbpcReport implements java.io.Serializable {
 
 	private static final long serialVersionUID = 3007568492686203507L;
 
-	// Fields
-
 	@Id
 	@Column(name="C_PK_ID")
+//	@JSONField(name="CPkId")
 	private String CPkId;
 	@Column(name="C_ORG_PK_ID")
 	private String COrgPkId;
