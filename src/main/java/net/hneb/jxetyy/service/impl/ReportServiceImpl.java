@@ -153,7 +153,7 @@ public class ReportServiceImpl implements ReportService {
 
         report.setCChildNme(basicJson.getString("CChildNme"));
         report.setCChildSex(basicJson.getString("CChildSex"));
-        report.setTBirthday(DateUtil.strToDate(basicJson.getString("TBirthday"), "yyyy-MM-dd"));
+        report.setTBirthday(basicJson.getString("TBirthday"));
         report.setCPhoneNo(basicJson.getString("CPhoneNo"));
         report.setCEffMrk("1");
         return report;
@@ -205,8 +205,8 @@ public class ReportServiceImpl implements ReportService {
 
         basicJson.put("CChildNme", report.getCChildNme());
 //        basicJson.put("CChildSex", report.getCChildSex());
-        basicJson.put("TBirthday", DateUtil.getDateStr(report.getTBirthday(), "yyyy-MM-dd"));
-        basicJson.put("TPreBirth", DateUtil.getDateStr(report.getTPreBirth(), "yyyy-MM-dd"));
+        basicJson.put("TBirthday", report.getTBirthday());
+        basicJson.put("TPreBirth", report.getTPreBirth());
         basicJson.put("NBirthHeight", report.getNBirthHeight());
         basicJson.put("NBirthWeight", report.getNBirthWeight());
         basicJson.put("NBirthHead", report.getNBirthHead());

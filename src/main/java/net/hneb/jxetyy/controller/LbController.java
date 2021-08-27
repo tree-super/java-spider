@@ -137,8 +137,7 @@ public class LbController {
         if(StringUtils.isNotBlank(questJson.getString("CUserId")))
             quest.setCUserId(questJson.getString("CUserId"));
         if(StringUtils.isNotBlank(questJson.getString("TBirthday")))
-            quest.setTBirthday(DateUtil.strToDate(questJson.getString("TBirthday"),
-                    "yyyy-MM-dd"));
+            quest.setTBirthday(questJson.getString("TBirthday"));
         if(StringUtils.isNotBlank(questJson.getString("CExecutor")))
             quest.setCExecutor(questJson.getString("CExecutor"));
         return quest;

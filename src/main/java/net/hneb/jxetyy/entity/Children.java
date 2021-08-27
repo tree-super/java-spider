@@ -22,9 +22,9 @@ public class Children implements java.io.Serializable {
 	private String CUserId;
 	private String CChildNme;
 	private String CChildSex;
-	private Date TBirthday;
+	private String TBirthday;
 	private String CPrebirthMrk;
-	private Date TPreBirth;
+	private String TPreBirth;
 	private Integer NConceiveWeek;
 	private Integer NConceiveDay;
 	private Float NBirthHeight;
@@ -52,7 +52,7 @@ public class Children implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Children(String cUserId, String cChildNme, String cChildSex, Date tBirthday) {
+	public Children(String cUserId, String cChildNme, String cChildSex, String tBirthday) {
 		this.CUserId = cUserId;
 		this.CChildNme = cChildNme;
 		this.CChildSex = cChildSex;
@@ -60,8 +60,8 @@ public class Children implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Children(String cUserId, String cChildNme, String cChildSex, Date tBirthday, String CPrebirthMrk,
-                    Date TPreBirth, Integer NConceiveWeek, Integer NConceiveDay, Float NBirthHeight, Float NBirthWeight,
+	public Children(String cUserId, String cChildNme, String cChildSex, String tBirthday, String CPrebirthMrk,
+                    String TPreBirth, Integer NConceiveWeek, Integer NConceiveDay, Float NBirthHeight, Float NBirthWeight,
                     Float NBirthHead, Float NBirthChest, Float NBirthSheight, String CBirthStsMrk, String CIdNo, String CPhone,
                     String CProvince, String CCity, String cCrtId, Date tCrtTm, String cUpdId, Date tUpdTm, String CHeadImg,
                     String CIll) {

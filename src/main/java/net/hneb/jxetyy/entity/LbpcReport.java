@@ -40,7 +40,7 @@ public class LbpcReport implements java.io.Serializable {
 	@Column(name="C_CHILD_SEX")
 	private String CChildSex;
 	@Column(name="T_BIRTHDAY")
-	private Date TBirthday;
+	private String TBirthday;
 	@Column(name="C_PHONE_NO")
 	private String CPhoneNo;
 	@Column(name="N_YEAR")
@@ -54,7 +54,7 @@ public class LbpcReport implements java.io.Serializable {
 	@Column(name="N_CONCEIVE_DAY")
 	private Integer NConceiveDay;
 	@Column(name="T_PRE_BIRTH")
-	private Date TPreBirth;
+	private String TPreBirth;
 	@Column(name="N_YEAR1")
 	private Integer NYear1;
 	@Column(name="N_MONTH1")

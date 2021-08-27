@@ -10,7 +10,6 @@ import net.hneb.jxetyy.entity.Children;
 import net.hneb.jxetyy.entity.User;
 import net.hneb.jxetyy.service.ArchBasService;
 import net.hneb.jxetyy.service.UserService;
-import net.hneb.jxetyy.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,9 +56,9 @@ public class ArchBasServiceImpl implements ArchBasService {
             childJson.put("CChildId", child.getCChildId());// 孩子id
             childJson.put("CChildNme", child.getCChildNme());// 姓名
             childJson.put("CChildSex", child.getCChildSex());// 性别
-            childJson.put("TBirthday", DateUtil.getDateStr(child.getTBirthday(), "yyyy-MM-dd"));// 出生年月
+            childJson.put("TBirthday", child.getTBirthday());// 出生年月
 
-            childJson.put("TPreBirth", DateUtil.getDateStr(child.getTPreBirth(), "yyyy-MM-dd"));// 预产期
+            childJson.put("TPreBirth", child.getTPreBirth());// 预产期
             childJson.put("NBirthHeight", child.getNBirthHeight());// 出生时身高
             childJson.put("NBirthWeight", child.getNBirthWeight());// 出生时体重
             childJson.put("NBirthChest", child.getNBirthChest());// 出生时胸围
@@ -123,7 +122,7 @@ public class ArchBasServiceImpl implements ArchBasService {
 
             newChild.setCChildNme(childNme);
             newChild.setCChildSex(childSex);
-            newChild.setTBirthday(DateUtil.strToDate(birthday, DateUtil.DATE_YYYY_MM_DD));
+            newChild.setTBirthday(birthday);
             newChild.setCUserId(parentId); // 孩子首要联系人，与基础档案C_PARENT_ID含义不同，
             //			说明如下：
             //			平台内t_child孩子表，一个孩子对应一条数据，第一次创建基础档案时，t_children的C_USER_ID和
@@ -141,7 +140,7 @@ public class ArchBasServiceImpl implements ArchBasService {
         if (StringUtils.isNotBlank(prebirthMrk))
             child.setCPrebirthMrk(prebirthMrk);
         if (StringUtils.isNotBlank(preBirth))
-            child.setTPreBirth(DateUtil.strToDate(preBirth, DateUtil.DATE_YYYY_MM_DD));
+            child.setTPreBirth(preBirth);
         if (StringUtils.isNotBlank(conceiveWeek))
             child.setNConceiveWeek(Integer.parseInt(conceiveWeek));
         if (StringUtils.isNotBlank(conceiveDay))
@@ -208,7 +207,7 @@ public class ArchBasServiceImpl implements ArchBasService {
         Children example = new Children();
         example.setCChildNme(childNme);
         example.setCChildSex(childSex);
-        example.setTBirthday(DateUtil.strToDate(birthday, DateUtil.DATE_YYYY_MM_DD));
+        example.setTBirthday(birthday);
 
         List<Children> children = childrenDao.select(example);
         if(children !=null && children.size() >0)
