@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import net.hneb.jxetyy.common.mapper.SearchFilters;
 import net.hneb.jxetyy.dao.BasNormDao;
@@ -111,6 +113,12 @@ public class ReportServiceImpl implements ReportService {
         return lbpcReportDao.list(filters.toParamMap());
     }
 
+    @Override
+    public PageInfo<LbpcReport> findPage(SearchFilters filters, PageInfo pageInfo) {
+        PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
+        return new PageInfo<>(lbpcReportDao.list(filters.toParamMap()));
+    }
+
     /**
      * 保存
      */
@@ -186,12 +194,11 @@ public class ReportServiceImpl implements ReportService {
     public JSONObject getLbpcReport(String pkId) {
 
         LbpcReport report = findById(pkId);
-
         JSONObject reportJson = (JSONObject) JSONObject.toJSON(report);
         JSONObject basicJson = new JSONObject();
         basicJson.put("CLbId", report.getCLbId());
         basicJson.put("CPkId", report.getCPkId());
-        basicJson.put("TTestTm", DateUtil.getDateStr(report.getTTestTm(), "yyyy-MM-dd"));
+        basicJson.put("TTestTm", DateUtil.getDateStr(report.getTTestTm()));
         basicJson.put("CUserId", report.getCUserId());
         basicJson.put("CParentId", report.getCParentId());
         basicJson.put("CChildId", report.getCChildId());
@@ -223,7 +230,7 @@ public class ReportServiceImpl implements ReportService {
         basicJson.put("CAge", getAge(report));
         basicJson.put("CJzAge", getJzAge(report));// 矫正年龄
 
-        reportJson.put("TTestTm", DateUtil.getDateStr(report.getTTestTm(), "yyyy-MM-dd"));
+        reportJson.put("TTestTm", DateUtil.getDateStr(report.getTTestTm()));
 
         for (int i = 1; i <= 5; i++) {
             try {

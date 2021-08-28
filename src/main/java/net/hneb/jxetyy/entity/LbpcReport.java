@@ -2,7 +2,9 @@ package net.hneb.jxetyy.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.util.TypeUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -20,7 +22,6 @@ public class LbpcReport implements java.io.Serializable {
 
 	@Id
 	@Column(name="C_PK_ID")
-//	@JSONField(name="CPkId")
 	private String CPkId;
 	@Column(name="C_ORG_PK_ID")
 	private String COrgPkId;
@@ -85,6 +86,7 @@ public class LbpcReport implements java.io.Serializable {
 	@Column(name="C_USER_ID")
 	private String CUserId;
 	@Column(name="T_TEST_TM")
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date TTestTm;
 	@Column(name="C_MENZHEN_NO")
 	private String CMenzhenNo;

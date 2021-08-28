@@ -42,14 +42,14 @@ function initLbpcReport() {
             }
             //如果报告的所属机构不是当前登录人员的机构，则隐藏除打印外的所有按钮
             //目前该情况适用于 获取了患者授权查看到患者报告的场景（该种情况下，若是当天的报告，则另一家医院可以点击“修正报告”从而修改其他医院的报告）
-            if (utils.CURRENT_DPT_ID != cd.formData.CDptId) {
-                //$(".ui-btn").remove();
-                $(".ui-btn").children().each(function (i, ele) {
-                    if ($(ele).find("i").html() != '打印报告') {
-                        $(ele).remove();
-                    }
-                });
-            }
+            // if (utils.CURRENT_DPT_ID != cd.formData.CDptId) {
+            //     //$(".ui-btn").remove();
+            //     $(".ui-btn").children().each(function (i, ele) {
+            //         if ($(ele).find("i").html() != '打印报告') {
+            //             $(ele).remove();
+            //         }
+            //     });
+            // }
         }
     });
 }
@@ -98,8 +98,8 @@ function exportPDF() {
     //创建照片
     let c = document.createElement("canvas");
     //照片高度和宽度是页面元素的两倍
-    c.width = document.body.clientWidth * 2
-    c.height = document.body.clientHeight * 2
+    c.width = document.body.clientWidth * 2;
+    c.height = document.body.clientHeight * 2;
     c.getContext("2d").scale(2, 2);
     html2canvas(document.body, {background: '#FFFFFF'}).then(function (canvas) {
             var contentWidth = canvas.width;

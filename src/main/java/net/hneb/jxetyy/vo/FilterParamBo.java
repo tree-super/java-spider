@@ -10,7 +10,7 @@ import java.util.Map;
 public class FilterParamBo {
 
 	@SuppressWarnings("rawtypes")
-	private Map param;
+	private Map<String, String> param;
 
 	private int firstRow;
 	private int maxRow;
@@ -32,12 +32,12 @@ public class FilterParamBo {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Map getParam() {
+	public Map<String, String> getParam() {
 		return param;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void setParam(Map param) {
+	public void setParam(Map<String, String> param) {
 		this.param = param;
 	}
 
