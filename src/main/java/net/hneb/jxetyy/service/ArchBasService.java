@@ -1,6 +1,8 @@
 package net.hneb.jxetyy.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
+import net.hneb.jxetyy.common.mapper.SearchFilters;
 import net.hneb.jxetyy.entity.Children;
 
 /**
@@ -10,7 +12,7 @@ public interface ArchBasService {
     /**
      * @return
      */
-    public JSONObject getBasicByPhoneNo(String phoneNo);
+    JSONObject getBasicByPhoneNo(String phoneNo);
 
     String saveChild(JSONObject basicJson, String parentId);
 
@@ -18,5 +20,7 @@ public interface ArchBasService {
      * 用姓名、性别、出生日期查询该孩子
      * @return
      */
-    public Children selectBy3Ele(String childNme, String childSex, String birthday);
+    Children selectBy3Ele(String childNme, String childSex, String birthday);
+
+    PageInfo<Children> findPage(SearchFilters filters, PageInfo pageInfo);
 }

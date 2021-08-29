@@ -2,6 +2,8 @@ package net.hneb.jxetyy.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import net.hneb.jxetyy.common.mapper.SearchFilters;
 import net.hneb.jxetyy.common.mapper.SearchOp;
@@ -107,7 +109,7 @@ public class ArchBasServiceImpl implements ArchBasService {
         String birthSheight = childJson.getString("NBirthSheight"); // 出生时坐高
         String birthStsMrk = childJson.getString("CBirthStsMrk"); // 出生时健康状况
         String idNo = childJson.getString("CIdNo"); // 身份证号码
-        String phone = childJson.getString("CPhone"); // 联系电话
+        String phone = childJson.getString("CPhoneNo"); // 联系电话
         String province = childJson.getString("CProvince"); // 所在省
         String city = childJson.getString("CCity"); // 所在市
         String headImg = childJson.getString("CHeadImg"); // 孩子头像
@@ -123,6 +125,7 @@ public class ArchBasServiceImpl implements ArchBasService {
             newChild.setCChildNme(childNme);
             newChild.setCChildSex(childSex);
             newChild.setTBirthday(birthday);
+            newChild.setCPhone(phone);
             newChild.setCUserId(parentId); // 孩子首要联系人，与基础档案C_PARENT_ID含义不同，
             //			说明如下：
             //			平台内t_child孩子表，一个孩子对应一条数据，第一次创建基础档案时，t_children的C_USER_ID和
@@ -214,4 +217,12 @@ public class ArchBasServiceImpl implements ArchBasService {
             return children.get(0);
         return null;
     }
+
+    @Override
+    public PageInfo<Children> findPage(SearchFilters filters, PageInfo pageInfo) {
+        PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
+        return new PageInfo<>(childrenDao.list(filters.toParamMap()));
+    }
+
+
 }
