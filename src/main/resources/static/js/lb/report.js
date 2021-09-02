@@ -34,8 +34,8 @@ function initLbpcReport() {
             //调用每个具体页面的方法，执行个性化的页面渲染
             showPage(mrk, bd, cd);
 
-            if (cd.formData.CEffMrk == '0') {
-                var obsolete = "<div class='void-icon'><img src='res/images/obsolete.png'></div>";
+            if (cd.formData.CEffMrk == '2') {
+                var obsolete = "<div class='void-icon'><img src='/images/obsolete.png'></div>";
                 $(".questionnaire-left").prepend(obsolete);
                 //隐藏修正报告按钮
                 $("#xzbg").hide();

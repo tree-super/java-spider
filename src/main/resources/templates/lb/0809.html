@@ -131,6 +131,7 @@
     <div class="questionnaire-left">
         <div class="questionnaire-tit">
             <h4></h4>
+            <div id="popWin_"></div>
             <i class="ui-help noprint">帮助</i>
         </div>
         <div class="children-info">
@@ -194,8 +195,10 @@
                             <span class="red-required">*</span>
                             出生日期&nbsp;</em>
                         <!-- jeasyui的api使用必须使用id TBirthday不能去掉 -->
-                        <div class="children-info-input">
-                            <input type="text" id="TBirthday" name="TBirthday" class="easyui-datebox" data-options="editable:false,validType:['isDate'],required:true"/>
+                        <div class="ui-gauge-input children-info-input">
+                            <input type="text" id="TBirthday" name="TBirthday"
+                                   class="easyui-datebox"
+                                   data-options="editable:false,validType:['isDate'],required:true"/>
                         </div>
                     </li>
                     <li class="col2">
@@ -342,14 +345,14 @@
 
 
     $(document).ready(function () {
+        utils.initHelpWindow(true);
         var divLeftWidth = $('.questionnaire-left').width();
         $(".ui-btn").css('width', divLeftWidth - 17);
         initCommon();
         initData();
         utils.closeLoading();
         utils.initDataGrid();
-
-
+        //$(".ui-help").trigger("click");
     });
 
     function choose() {
@@ -526,8 +529,8 @@
     }
 
     function start() {
-        submit();
-        return;
+        //submit();
+        //return;
         //禁用radio
         input.attr('disabled', 'disabled');
         //关闭开始按钮

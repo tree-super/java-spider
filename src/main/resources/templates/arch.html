@@ -1,28 +1,26 @@
-<!DOCTYPE html>
+<!DOCTYPE>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
-<title>持续注意力测试系统 | 档案查询</title>
-<th:block th:replace="common/res::res"></th:block>
-<style type="text/css">
-	.hospitalRadio{display: inline-block;vertical-align:middle;}
-	.hospitalRadio label{font-weight: bold;color: #333 !important;}
-	.hospitalRadio input[type=radio]{width:15px;height:15px;margin-right: 5px;}
-	/*流媒体查询分辨率小于1024*/
-	@media screen and (max-width: 1024px) {
-		.ui-gauge ol li input[name=CMenzhenNo]{width: 50px;}
-	}
-</style>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>持续注意力测试系统 | 档案查询</title>
+    <meta name="description" content="健康测评系统">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+	<th:block th:replace="common/res::res"></th:block>
+
 </head>
 
-<body style="height:100%">
+<body style="height:100%;">
 	<div class="r-min-width">
 		<form id="tb">
 			<div class="ui-gauge">
-				<div class="ui-help noprint" onclick="$('#archMgr').window('open')" style="position:absolute;right:0px;top:10px">帮助</div>
-				<!-- 查询条件 -->
-				<div id="screeningMore">
-					<!-- 固定 -->
+<!--				<div class="ui-help">帮助</div>-->
+				<ol class="clear" id="screeningMore">
 					<ol class="clear">
 						<li class="col3">
 							<em>手机号码&nbsp;</em>
@@ -52,7 +50,8 @@
 							<input type="text" name="CMenzhenNo" />
 						</li>
 					</ol>
-				</div>
+				</ol>
+
 				<div class="ui-screening">
 					<div class="ui-screening-more" onclick="screeningMore(this)">
 						<span>展开</span>
@@ -71,69 +70,79 @@
 				</div>
 			</div>
 		</form>
-		<table id="archMgr" class="easyui-datagrid" style="width:100%; height:100%;" rownumbers="true" data-options="toolbar:'#tb',footer:'#ft',pagination:true,pagination:true,pageSize:20,singleSelect:true">
+		<table id="archMgr" class="easyui-datagrid" style="width:100%; height:100%;" rownumbers="true" data-options="fit:true,toolbar:'#tb',footer:'#ft',pagination:true,pagination:true,pageSize:20,singleSelect:true">
 			<thead>
-				<tr>
-				  	<th field="CBasId" data-options="hidden:true">主键</th>
-		            <th field="CChildId" data-options="hidden:true">孩子ID</th>
-		            <th field="CParentId" data-options="hidden:true">父母ID</th>
-					<th field="CChildNme" width="10%">姓名</th>
-					<th field="CChildSex" width="10%" data-options="formatter:formatSex1">性别</th>
-					<th field="TBirthday" width="20%">出生日期</th>
-					<th field="CPhoneNo" width="15%">手机号码</th>
-					<th field="CMenzhenNo" width="15%">门诊/住院号</th>
-					<th field="TArchTm" width="15%">建档时间</th>
-				</tr>
-			</thead>
+			<tr>
+				<th field="CChildId" data-options="hidden:true">孩子ID</th>
+				<th field="CUserId" data-options="hidden:true">父母ID</th>
+				<th field="CChildNme" width="15%">姓名</th>
+				<th field="CChildSex" width="10%" data-options="formatter:formatSex1">性别</th>
+				<th field="TBirthday" width="20%">出生日期</th>
+				<th field="CPhone" width="15%">手机号码</th>
+				<th field="CIdNo" width="20%">门诊/住院号</th>
+				<th field="TCrtTm" width="20%">建档时间</th>
+			</tr>
+		    </thead>
 		</table>
 		<div id="ft" style="padding:5px 8px 10px 8px;height:auto">
-<!--		   <a href="javascript:see();" class="iconfont icon-chakan">档案</a>-->
-<!--		   <a href="javascript:change();" class="iconfont icon-dati">修改信息</a>-->
+
 		</div>
 	</div>
-
+	
 	<script type="text/javascript">
-		$(document).ready(function() {
+		$(document).ready(function(){
 			$("#CChildSex").combobox("clear");
 
 			//页面初始化时获取数据
-			query();
 			//初始化时就给queryBtn绑定了页面中的query方法
 			utils.initDataGrid();
-			utils.closeLoading();
+
+
 			utils.initHelpWindow(true);
+			query();
+			utils.closeLoading();
 		});
 
+
 		//点击显示隐藏筛选条件
+		//***************************************************************************************
+		//*****注意：由于form表单的结构不一样，量表的查询和（听力筛查、体格检查）的该方法不一样123************
+		//***************************************************************************************
 		function screeningMore(obj){
-			if($("#screeningMore").css("height")=="38px"){
-				$("#screeningMore").animate({"height":"114px"},300);
+			var maxHeight=122;//展开的高度
+			var minHeight=38;//收缩的高度
+			var delay = 300;
+			if($("#screeningMore").css("height")==(minHeight+"px")){
+				$("#screeningMore").animate({"height":maxHeight+"px"},delay);
 				$(obj).find("span").text("收起");
-				$(obj).find("i").css({"transform":"rotate(180deg)","-webkit-transform":"rotate(180deg)"})
+				$(obj).find("i").css({"transform":"rotate(180deg)","-webkit-transform":"rotate(180deg)"});
+				$("#state").show(delay);
+
+				$(".datagrid-view").animate({"height":$(".datagrid-view").height()-maxHeight},delay);
+				$(".datagrid-body").animate({"height":$(".datagrid-body").height()-maxHeight},delay);
+
 			}else{
-				$("#screeningMore").animate({"height":"38px"},300);
+				$("#screeningMore").animate({"height":minHeight+"px"},delay);
 				$(obj).find("span").text("展开");
-				$(obj).find("i").css({"transform":"rotate(360deg)","-webkit-transform":"rotate(360deg)"})
+				$(obj).find("i").css({"transform":"rotate(360deg)","-webkit-transform":"rotate(360deg)"});
+				$("#state").hide(delay);
+
+				$(".datagrid-view").animate({"height":$(".datagrid-view").height()+maxHeight},delay);
+				$(".datagrid-body").animate({"height":$(".datagrid-body").height()+maxHeight},delay);
 			}
 		}
 
-		function query() {
+		//清空查询条件
+		function clearForm(){
+			$("#tb").form("clear");
+		}
+
+		function query(){
 			//判断出生日期结束时间不能在开始时间之前
 			var TBirthBgn = new Date($("#TBirthBgn").datebox("getValue"));//转换为开始时间
-			var TBirthEnd = new Date($("#TBirthEnd").datebox("getValue"));//转换为结束时间
-			if(TBirthBgn.getTime()>TBirthEnd.getTime()){
-				utils.alert("出生日期结束时间不能在开始时间之前");
-				return false;
-			}
-			var TBgnTm= new Date($("#TBgnTm").datebox("getValue"));//转换为开始时间
-			var TEndTm = new Date($("#TEndTm").datebox("getValue"));//转换为结束时间
-			if(TBgnTm.getTime()>TEndTm.getTime()){
-				utils.alert("建档时间结束时间不能在开始时间之前");
-				return false;
-			}
 			utils.ajax({
-				service : "archAction",
-				method : "query",
+				control:"arch/list",
+				method:"query",
 				forms : [ "tb" ],
 				validate : true,
 				sucFun : function(mrk, bd, cd) {
@@ -146,13 +155,6 @@
 			});
 		}
 
-		function clearForm() {
-			//清空查询条件
-			$("#tb").form("clear");
-			//是否本院出生设置默认值 // TODO
-// 			$("CBornDptMrk").combobox("select",0);
-		}
-
 		function formatSex1(value,row,index){
 			if("F"==value)
 				return "女";
@@ -160,5 +162,6 @@
 				return "男";
 		}
 	</script>
+	
 </body>
 </html>

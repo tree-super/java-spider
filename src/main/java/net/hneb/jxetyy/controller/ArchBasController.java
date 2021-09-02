@@ -37,7 +37,7 @@ public class ArchBasController {
      */
     @RequestMapping(value = {"/arch" })
     public String arch(HttpServletRequest servletRequest) {
-        return "/arch";
+        return "arch";
     }
 
     /**
@@ -57,7 +57,7 @@ public class ArchBasController {
 
     @RequestMapping(value = {"/arch/list" })
     @ResponseBody
-    public JSONObject listArch(HttpServletRequest request){
+    public JSONObject listArchs(HttpServletRequest request){
         JSONObject custDataReq = HnebRequestUtils.getRequestCustData(request);
         JSONObject bizJsonData = HnebRequestUtils.getRequestBizData(request);
         JSONObject filterJsonData = bizJsonData.getJSONObject("filter");
@@ -65,32 +65,15 @@ public class ArchBasController {
 
         SearchFilters filters = new SearchFilters();
         if(StringUtils.isNotBlank(filter.getParam().get("CChildNme")))
-            filters.add("C_CHILD_NME", SearchOp.EQ, filter.getParam().get("CChildNme"));
+            filters.add("C_CHILD_NME", SearchOp.LK, filter.getParam().get("CChildNme"));
         if(StringUtils.isNotBlank(filter.getParam().get("CChildSex")))
             filters.add("C_CHILD_SEX", SearchOp.EQ, filter.getParam().get("CChildSex"));
         if(StringUtils.isNotBlank(filter.getParam().get("CPhoneNo")))
-            filters.add("C_PHONE_NO", SearchOp.EQ, filter.getParam().get("CPhoneNo"));
+            filters.add("C_PHONE", SearchOp.LK, filter.getParam().get("CPhoneNo"));
         if(StringUtils.isNotBlank(filter.getParam().get("birthBgn")))
             filters.add("T_BIRTHDAY", SearchOp.EQ, filter.getParam().get("birthBgn"));
         if(StringUtils.isNotBlank(filter.getParam().get("CMenzhenNo")))
-            filters.add("C_MENZHEN_NO", SearchOp.EQ, filter.getParam().get("CMenzhenNo"));
-
-        Boolean state0=custDataReq.getBoolean("state0"),
-                state1=custDataReq.getBoolean("state1"),
-                state2=custDataReq.getBoolean("state2");
-        List<String> states = new ArrayList<>();
-        if(state0 != null && state0)states.add("0");
-        if(state0 != null && state0)states.add("1");
-        if(state0 != null && state0)states.add("2");
-
-        if(StringUtils.isNotBlank(filter.getParam().get("TBgnTm")))
-            filters.add("T_TEST_TM", SearchOp.GE,
-                    DateUtil.strToDate(filter.getParam().get("TBgnTm"), DateUtil.DATE_YYYY_MM_DD));
-        if(StringUtils.isNotBlank(filter.getParam().get("TEndTm"))) {
-            Date endDate = DateUtil.strToDate(filter.getParam().get("TEndTm"), DateUtil.DATE_YYYY_MM_DD);
-            endDate = DateUtil.calDay(endDate, 1);
-            filters.add("T_TEST_TM", SearchOp.LE, endDate);
-        }
+            filters.add("C_ID_NO", SearchOp.LK, filter.getParam().get("CMenzhenNo"));
 
         PageInfo pageInfo = new PageInfo();
         String pageNumStr = filter.getParam().get("PageNum_");
@@ -99,7 +82,7 @@ public class ArchBasController {
         pageInfo.setPageSize(Integer.parseInt(pageSizeStr));
         PageInfo<Children> childrenPage = archBasService.findPage(filters, pageInfo);
         JSONArray bizJsonDataRes = new JSONArray();
-        HnebRequestUtils.putBizList(bizJsonDataRes, "query", childrenPage);
+        HnebRequestUtils.putBizList(bizJsonDataRes, "archMgr", childrenPage);
 
         JSONObject custDataRes = new JSONObject();
         return HnebRequestUtils.getResponseData(custDataRes, bizJsonDataRes, true);

@@ -82,4 +82,7 @@
         WHERE C_PK_ID = #{id};
     </select>
 
+    <update id="updateState">
+        UPDATE t_lbpc_report SET C_EFF_MRK=#{mrk} WHERE C_PK_ID = #{id};
+    </update>
 </mapper>

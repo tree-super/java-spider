@@ -247,7 +247,6 @@ String.prototype.endWith=function(s){
 						var dataStr = JSON.stringify(bd[i].data_);
 						var filterHtml=dataStr.replace(/<\/?.+?>/g,"");
 						filterHtml=filterHtml.replace(/&nbsp;/g,"");
-						var t1 = new Date();
 						$('#'+formId).datagrid('loadData',JSON.parse(filterHtml));
 						//console.log(new Date().getTime()-t1);
 					}else{
@@ -368,7 +367,7 @@ String.prototype.endWith=function(s){
 			width : options.width  || 600,
 			height: options.height || 400,
 			title : options.title  || "信息",
-			url	  : '',
+			url	  : options.url,
 			modal : true,
 			minimizable:options.min || false,
 		    collapsible:options.collapsible || false,
@@ -703,41 +702,17 @@ String.prototype.endWith=function(s){
 	
 	//初始化帮助页面，autoOpen为true表示初始化页面的时候会自动打开（前提是当前浏览器必须支持localStorage）
 	utils_.initHelpWindow = function (autoOpen){
-		//量表标题后面的？的弹出事件
-		var currentUrl = location.href;
-		var helpHtmlNme = currentUrl.substring(currentUrl.lastIndexOf("/")+1,currentUrl.lastIndexOf("."));
-		//部分页面可能没有设置basePath的js变量
-		try{
-			basePath;
-		}catch(e){
-			basePath = currentUrl.substring(0,currentUrl.indexOf("/jsp"));
-		}
 		$(".ui-help").on("click",function(){
 			var opt={
-					url:basePath+'/memo/html/'+helpHtmlNme+".htm",
-					width:'80%',
-					title:'操作提示',
-					maximizable:false,
-					onClose:function(){
-						
-					}
+				url:'/help/0809',
+				width:'50%',
+				height: '70%',
+				title:'操作提示',
+				maximizable:false,
+				onClose:function(){}
 			};
-			utils.popWin(opt);
+			utils_.popWin(opt);
 		});
-
-		return false;
-
-		if(!autoOpen){
-			return;
-		}
-		
-		//延迟一个时间显示，否则由于页面还未渲染完毕，导致popWin的高度有问题
-		setTimeout(function(){
-			//支持本地缓存 且 本地缓存中没有设置说不在提示
-			if(localStorage && localStorage.getItem(helpHtmlNme)!="false"){
-				$(".ui-help").trigger("click");
-			}
-		},50);
 	}
 	utils_.console=function(){
 //		console.log("这个页面有数据 " + basePath);

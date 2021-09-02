@@ -1,5 +1,6 @@
 package net.hneb.jxetyy.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import javax.persistence.Id;
@@ -38,6 +39,7 @@ public class Children implements java.io.Serializable {
 	private String CProvince;
 	private String CCity;
 	private String CCrtId;
+	@JSONField(format="yyyy-MM-dd HH:mm:ss")
 	private Date TCrtTm;
 	private String CUpdId;
 	private Date TUpdTm;

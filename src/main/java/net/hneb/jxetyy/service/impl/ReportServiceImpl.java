@@ -17,6 +17,7 @@ import net.hneb.jxetyy.service.ReportService;
 import net.hneb.jxetyy.utils.DateUtil;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -175,13 +176,7 @@ public class ReportServiceImpl implements ReportService {
      * 根据 id 查找
      */
     public LbpcReport findById(String id){
-//        LbpcReport report = new LbpcReport();
-//        report.setCPkId(id);
-//        return lbpcReportDao.selectOne(report);
         return lbpcReportDao.selectByPrimaryKey(id);
-//        if(reports == null || reports.isEmpty()) return null;
-
-//        return lbpcReportDao.findOne(id);
     }
 
     /**
@@ -364,6 +359,22 @@ public class ReportServiceImpl implements ReportService {
         return report;
     }
 
+    @Override
+    public boolean disableReport(String pkId) {
+        LbpcReport report = findById(pkId);
+        if(report == null || StringUtils.isBlank(pkId)) return false;
+        int res = lbpcReportDao.updateState(pkId, "2");
+        return res > 0;
+    }
+
+    @Override
+    public boolean recoverReport(String pkId) {
+        LbpcReport report = findById(pkId);
+        if(report == null || StringUtils.isBlank(pkId)) return false;
+        int res = lbpcReportDao.updateState(pkId, "1");
+        return res > 0;
+    }
+
     private String getAge(LbpcReport report) {
         String value = "";
         Integer NYear = report.getNYear();
@@ -430,5 +441,6 @@ public class ReportServiceImpl implements ReportService {
         return  (zs-x)/sd;
 
     }
+
 
 }

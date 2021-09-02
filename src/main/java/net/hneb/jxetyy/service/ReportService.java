@@ -29,5 +29,7 @@ public interface ReportService {
 
     LbpcReport create(LbpcQuest quest, JSONObject basicJson, JSONObject custData);
 
+    boolean disableReport(String pkId);
 
+    boolean recoverReport(String pkId);
 }

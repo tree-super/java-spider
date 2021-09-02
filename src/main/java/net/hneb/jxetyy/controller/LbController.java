@@ -32,6 +32,11 @@ public class LbController {
         return "lb/0809";
     }
 
+    @RequestMapping(value = {"/help/0809" })
+    public String help0809() {
+        return "lb/0809-help";
+    }
+
     @RequestMapping(value = {"/lb/getLbBasInfo" })
     @ResponseBody
     public JSONObject getLbBasInfo(HttpServletRequest servletRequest) {

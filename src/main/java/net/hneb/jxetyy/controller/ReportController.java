@@ -70,6 +70,26 @@ public class ReportController {
         return HnebRequestUtils.getResponseData(custDataRes, bizJsonData, true);
     }
 
+    @RequestMapping(value = {"/report/disable" })
+    @ResponseBody
+    public JSONObject reportDisable(HttpServletRequest request){
+        JSONObject custDataReq = HnebRequestUtils.getRequestCustData(request);
+        String pkId = custDataReq.getString("pkId");
+        JSONArray bizJsonDataRes = new JSONArray();
+        JSONObject custDataRes = new JSONObject();
+        return HnebRequestUtils.getResponseData(custDataRes, bizJsonDataRes, reportService.disableReport(pkId));
+    }
+
+    @RequestMapping(value = {"/report/recover" })
+    @ResponseBody
+    public JSONObject reportRecover(HttpServletRequest request){
+        JSONObject custDataReq = HnebRequestUtils.getRequestCustData(request);
+        String pkId = custDataReq.getString("pkId");
+        JSONArray bizJsonDataRes = new JSONArray();
+        JSONObject custDataRes = new JSONObject();
+        return HnebRequestUtils.getResponseData(custDataRes, bizJsonDataRes, reportService.recoverReport(pkId));
+    }
+
     @RequestMapping(value = {"/report/list" })
     @ResponseBody
     public JSONObject listReport(HttpServletRequest request){
@@ -80,24 +100,26 @@ public class ReportController {
 
         SearchFilters filters = new SearchFilters();
         if(StringUtils.isNotBlank(filter.getParam().get("CChildNme")))
-            filters.add("C_CHILD_NME", SearchOp.EQ, filter.getParam().get("CChildNme"));
+            filters.add("C_CHILD_NME", SearchOp.LK, filter.getParam().get("CChildNme"));
         if(StringUtils.isNotBlank(filter.getParam().get("CChildSex")))
             filters.add("C_CHILD_SEX", SearchOp.EQ, filter.getParam().get("CChildSex"));
         if(StringUtils.isNotBlank(filter.getParam().get("CPhoneNo")))
-            filters.add("C_PHONE_NO", SearchOp.EQ, filter.getParam().get("CPhoneNo"));
+            filters.add("C_PHONE_NO", SearchOp.LK, filter.getParam().get("CPhoneNo"));
         if(StringUtils.isNotBlank(filter.getParam().get("birthBgn")))
             filters.add("T_BIRTHDAY", SearchOp.EQ, filter.getParam().get("birthBgn"));
         if(StringUtils.isNotBlank(filter.getParam().get("CMenzhenNo")))
-            filters.add("C_MENZHEN_NO", SearchOp.EQ, filter.getParam().get("CMenzhenNo"));
+            filters.add("C_MENZHEN_NO", SearchOp.LK, filter.getParam().get("CMenzhenNo"));
 
         Boolean state0=custDataReq.getBoolean("state0"),
                 state1=custDataReq.getBoolean("state1"),
                 state2=custDataReq.getBoolean("state2");
         List<String> states = new ArrayList<>();
         if(state0 != null && state0)states.add("0");
-        if(state0 != null && state0)states.add("1");
-        if(state0 != null && state0)states.add("2");
+        if(state1 != null && state1)states.add("1");
+        if(state2 != null && state2)states.add("2");
 
+        if(states.size() > 0)
+            filters.add("C_EFF_MRK", SearchOp.IN, states);
         if(StringUtils.isNotBlank(filter.getParam().get("TBgnTm")))
             filters.add("T_TEST_TM", SearchOp.GE,
                     DateUtil.strToDate(filter.getParam().get("TBgnTm"), DateUtil.DATE_YYYY_MM_DD));

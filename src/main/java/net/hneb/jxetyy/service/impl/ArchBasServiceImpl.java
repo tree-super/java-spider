@@ -108,7 +108,7 @@ public class ArchBasServiceImpl implements ArchBasService {
         String birthChest = childJson.getString("NBirthChest"); // 出生时胸围
         String birthSheight = childJson.getString("NBirthSheight"); // 出生时坐高
         String birthStsMrk = childJson.getString("CBirthStsMrk"); // 出生时健康状况
-        String idNo = childJson.getString("CIdNo"); // 身份证号码
+        String idNo = childJson.getString("CMenzhenNo"); // 身份证号码
         String phone = childJson.getString("CPhoneNo"); // 联系电话
         String province = childJson.getString("CProvince"); // 所在省
         String city = childJson.getString("CCity"); // 所在市
