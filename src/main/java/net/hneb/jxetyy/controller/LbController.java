@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,7 +45,7 @@ public class LbController {
     public String cpt(@RequestParam(name = "order",required = false) String order,
                       @RequestParam(name = "name",required = false) String name,
                       @RequestParam(name = "sex",required = false) String sex,
-                      @RequestParam(name = "bithday",required = false) String bithday,
+                      @RequestParam(name = "birthday",required = false) String birthday,
                       @RequestParam(name = "phone",required = false) String phone,
                       @RequestParam(name = "executor",required = false) String executor,
                       @RequestParam(name = "doctor",required = false) String doctor,
@@ -64,8 +65,8 @@ public class LbController {
         else model.addAttribute("error", "缺少基本信息:name，无法进行测试，请关闭页面重新进入！");
         if(StringUtils.isNotBlank(sex))model.addAttribute("sex", sex);
         else model.addAttribute("error", "缺少基本信息:sex，无法进行测试，请关闭页面重新进入！");
-        if(StringUtils.isNotBlank(bithday))model.addAttribute("bithday", bithday);
-        else model.addAttribute("error", "缺少基本信息:bithday，无法进行测试，请关闭页面重新进入！");
+        if(StringUtils.isNotBlank(birthday))model.addAttribute("birthday", birthday);
+        else model.addAttribute("error", "缺少基本信息:birthday，无法进行测试，请关闭页面重新进入！");
         if(StringUtils.isNotBlank(phone))model.addAttribute("phone", phone);
         else model.addAttribute("error", "缺少基本信息:phone，无法进行测试，请关闭页面重新进入！");
         if(StringUtils.isNotBlank(executor))model.addAttribute("executor", executor);
@@ -119,7 +120,7 @@ public class LbController {
 
     @RequestMapping(value = {"/callback" })
     @ResponseBody
-    public JSONObject callback(JSONObject json) {
+    public JSONObject callback(@RequestBody JSONObject json) {
         log.info("回写的订单信息, {}", json.toJSONString());
         JSONObject res = new JSONObject();
         res.put("result", "好");

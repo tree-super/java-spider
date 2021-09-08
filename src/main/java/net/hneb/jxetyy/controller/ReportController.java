@@ -40,8 +40,9 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @RequestMapping(value = {"/report/0809" })
-    public String report0809(@RequestParam(name = "pkId") String pkId, Model model) {
+    @RequestMapping(value = {"/report/{id}" })
+    public String report0809(@RequestParam(name = "id") String pkId, Model model) {
+        model.addAttribute("pkid", pkId);
         return "report/0809-report";
     }
 

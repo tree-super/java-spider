@@ -153,7 +153,7 @@
                     <input type="hidden" name="CExt2" id="CExt2"/>
                     <input type="hidden" name="CExt3" id="CExt3"/>
                     <input type="hidden" name="hiddenNum" id="hiddenNum"/>
-                    <input id="order" type="hidden" th:value="${order}">
+                    <input name="order" type="hidden" th:value="${order}">
                 <ul class="clear">
                     <li class="col3">
                         <em>
@@ -166,7 +166,9 @@
                                    th:readonly="${phone} == null or ${#strings.isEmpty(phone)}?'':'readonly'"
                                    th:value="${phone}"/>
                         </div>
+                        <th:block th:if="${order} == null or ${#strings.isEmpty(order)}">
                         <div class="ui-opt noprint" id="clearBasicInfo">清除</div>
+                        </th:block>
                         <!--关联手机号下拉 -->
                         <div class="drop-down-box" id="phoneDown">
                             <div class="drop-down">
@@ -214,9 +216,9 @@
                         <!-- jeasyui的api使用必须使用id TBirthday不能去掉 -->
                         <div class="ui-gauge-input children-info-input">
                             <input type="text" id="TBirthday" name="TBirthday"
-                                   th:class="${bithday} == null or ${#strings.isEmpty(bithday)}?'easyui-datebox':''"
+                                   th:class="${birthday} == null or ${#strings.isEmpty(birthday)}?'easyui-datebox':''"
                                    data-options="editable:false,validType:['isDate'],required:true"
-                                   th:value="${bithday}"/>
+                                   th:value="${birthday}"/>
                         </div>
                     </li>
                     <li class="col2">
@@ -389,25 +391,31 @@
     //反应时间数组
     var reaction = [];
     //平均反应时间
-    var averageReaction = 0;
+    let averageReaction = 0;
     var pageError = '[[${error}]]';
+    var birthdayVal = '[[${birthday}]]';
+    var canOpen = true;
 
     $(document).ready(function () {
         utils.initHelpWindow(true);
         var divLeftWidth = $('.questionnaire-left').width();
         $(".ui-btn").css('width', divLeftWidth - 17);
         initCommon();
-        if(pageError && pageError.length > 5){
-            $("#nextBtn").disable();
-            $.messager.alert('系统提示', pageError,
-                'info', function () {
-                });
-            return;
-        }
         initData();
         utils.closeLoading();
         utils.initDataGrid();
+        if(birthdayVal && birthdayVal.length > 3)
+            $("#TBirthday").datebox("setValue", birthdayVal);
+        //utils.initDataGrid();
         //$(".ui-help").trigger("click");
+        if(pageError && pageError.length > 5){
+            $.messager.alert('系统提示', pageError,
+                'info', function () {
+                });
+            $("#nextBtn").hide();
+            canOpen = false;
+            return;
+        }
     });
 
     function choose() {
@@ -628,8 +636,8 @@
                     //统计分段固定为2分钟
                     if (i == question.length - 1) {
                         //计算平均反应时间
-                        var sum=0;
-                        for(var j =0;j<reaction.length;j++){
+                        let sum=0;
+                        for(let j =0;j<reaction.length;j++){
                             sum+=reaction[j];
                         }
                         averageReaction=sum/reaction.length;
@@ -733,22 +741,22 @@
         interval = 1.5;
         //创建答题数组
         //元数据
-        var metadata = [0, 1, 2, 4, 5, 6, 7, 8, 9];
+        let metadata = [0, 1, 2, 4, 5, 6, 7, 8, 9];
         //3的插入序列
-        var sequence = [];
+        let sequence = [];
         //创建答题数组
         //分段数组（2分钟）
         var questPart = [];
         //倍数（2分钟）
         var multiple = 6;
         for (var i = 1; i <= multiple; i++) {
-            for (var i = 0; i < 16; i++) {
+            for (let i = 0; i < 16; i++) {
                 sequence[i] = Math.floor(Math.random() * 79)
             }
-            for (var i = 0; i < 80; i++) {
+            for (let i = 0; i < 80; i++) {
                 //下标是否在插入序列中
                 if ($.inArray(i, sequence) == -1) {
-                    var num = metadata.splice(Math.random() * 9, 1);
+                    let num = metadata.splice(Math.random() * 9, 1);
                     if (metadata.length < 9) {
                         metadata.push(num[0]);
                     }
@@ -761,13 +769,13 @@
         }
        // console.log(question);
         //试用数组
-        for (var i = 0; i < 16; i++) {
+        for (let i = 0; i < 16; i++) {
             sequence[i] = Math.floor(Math.random() * 79)
         }
-        for (var i = 0; i < 80; i++) {
+        for (let i = 0; i < 80; i++) {
             //下标是否在插入序列中
             if ($.inArray(i, sequence) == -1) {
-                var num = metadata.splice(Math.random() * 9, 1);
+                let num = metadata.splice(Math.random() * 9, 1);
                 if (metadata.length < 9) {
                     metadata.push(num[0]);
                 }

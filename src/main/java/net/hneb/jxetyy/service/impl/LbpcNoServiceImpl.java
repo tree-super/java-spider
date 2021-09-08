@@ -1,6 +1,7 @@
 package net.hneb.jxetyy.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import net.hneb.jxetyy.dao.LbpcNoDao;
 import net.hneb.jxetyy.entity.LbpcNo;
@@ -16,8 +17,13 @@ import net.hneb.jxetyy.utils.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.Map;
@@ -33,6 +39,8 @@ public class LbpcNoServiceImpl implements LbNoService {
     @Value("${net.hneb.his.order}")
     private String his;
 
+    @Autowired
+    private RestTemplate restTemplate;
     @Autowired
     private LbpcNoDao lbpcNoDao;
     @Autowired
@@ -98,7 +106,7 @@ public class LbpcNoServiceImpl implements LbNoService {
         reportService.saveReport(report);
         log.info("生成报告:{}", report.getCPkId());
         //回写报告 id 到 his接口,记得在作废报告也要调用回写报告接口
-        syncOrder(report);
+        if(StringUtils.isNotBlank(report.getCAns15()))syncOrder(report);
 
         JSONObject result = new JSONObject();
         result.put("flag", true);
@@ -106,10 +114,25 @@ public class LbpcNoServiceImpl implements LbNoService {
         return result;
     }
 
-    private void syncOrder(LbpcReport report){
+
+    public void syncOrder(LbpcReport report){
         log.info("回写报告,report:{},order:{}", report.getCPkId(), report.getCAns15());
         JSONObject req = new JSONObject();
-        req.put("result", "好");
-        HttpUtil.post(his, req.toJSONString());
+        req.put("order", report.getCAns15());//订单 id
+        req.put("report", report.getCPkId());//报告 id
+        req.put("state", report.getCEffMrk());//"1"正常，"2"作废
+        req.put("testTime", DateUtil.getDateStr(report.getTTestTm()));//测试时间
+        req.put("result", report.getCAns7());// 结论
+        req.put("level", report.getCAns8());// 症状程度
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        String json = req.toJSONString();
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
+        String now = DateUtil.getDateStr(new Date());
+        log.info("http url:{}, json:{}, time:{}", his, json, now);
+        ResponseEntity<String> postForEntity = restTemplate.postForEntity(his, request, String.class);
+        String result = postForEntity.getBody();
+        log.info("http url:{}, result:{}, time:{}", result, now);
+//        HttpUtil.post(his, req.toJSONString());
     }
 }

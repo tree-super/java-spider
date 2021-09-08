@@ -34,7 +34,7 @@ public class HttpUtil {
             HttpEntity entity = response.getEntity();
             //转为字符串
             String result = EntityUtils.toString(entity, "UTF-8");
-            log.info("http url:{}, json:{}, time:{}", url, json, now);
+            log.info("http url:{}, result:{}, time:{}", url, result, now);
             return result;
         }catch (Exception e){
             e.printStackTrace();

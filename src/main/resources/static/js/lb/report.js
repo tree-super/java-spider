@@ -16,8 +16,8 @@ function initReport() {
 }
 
 //获取数据
-function initLbpcReport() {
-    var pkId = utils.getParam("pkId");
+function initLbpcReport(pkId) {
+    if(!pkId || pkId.length<3){pkId = utils.getParam("pkId");}
     utils.ajax({
         control: "report/getLbpcReport",
         method: "getLbpcReport",

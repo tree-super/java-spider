@@ -30,7 +30,7 @@ function initCommon() {
 	initScene();
 	
 	//询问是否全屏
-	confirmFullScreen();
+	//confirmFullScreen();
 	
 	//初始化右侧的内容
 	initRight();
@@ -490,7 +490,7 @@ function submit(custData,relocate) {
 					tag="<br/>加入【"+tmp+"】专案，请在左侧[专案查询]菜单中查看"
 				}
 				utils.alert("提交成功"+tag,function(){
-					var url = "/report/" + lbId+ "?pkId=" + cd.CPkId;
+					var url = "/report/" + cd.CPkId;
 					
 					//如果当前打开的页面有如下两个参数，则跳转到报告中去的时候需要带上这两个参数，否则从报告中点击修改的时候，打开的页面会显示右边的内容
 					//主要用户mainFlat中的身高体重和体格检查
@@ -536,7 +536,7 @@ function submit(custData,relocate) {
 	});
 
 	utils.alert("提交成功",function(){
-		var url = "/report/0809?pkId=df5c1fd2-9e23-4eee-8c99-c5c42fc336f2";
+		var url = "/report/df5c1fd2-9e23-4eee-8c99-c5c42fc336f2";
 
 		//如果当前打开的页面有如下两个参数，则跳转到报告中去的时候需要带上这两个参数，否则从报告中点击修改的时候，打开的页面会显示右边的内容
 		//主要用户mainFlat中的身高体重和体格检查
@@ -689,7 +689,7 @@ function bindEvent(){
 		onChange : function(newdate,olddate){
 			if(newdate=="")return;
 			if(isNaN(Date.parse(newdate))){
-				$("#TBirthday").datebox("setValue","");
+				$("#nextBtn").hide();
 				return;
 			}
 			var sysdate=new Date(utils.SYS_DATE); 
@@ -697,7 +697,8 @@ function bindEvent(){
 			// 不能选择今天之后的时间
 			if (!dateValidate(sysdate, date)) {
 				utils.alert("不能选择今天之后的时间");
-				$('#TBirthday').datebox('setValue', '');// 重置编辑框
+				//$('#TBirthday').datebox('setValue', '');// 重置编辑框
+				$("#nextBtn").hide();
 				return false;
 			}
 			
@@ -707,20 +708,23 @@ function bindEvent(){
 				var range = lbMsg_[lbid].range;
 				if(range.AlertType=="alert"){//必须拦截的表
 					utils.alert("该儿童不符合测评适用年龄");//弹出提示
-					$('#TBirthday').datebox('setValue', '');//清空不符合年龄段的生日
+					//$('#TBirthday').datebox('setValue', '');//清空不符合年龄段的生日
+					$("#nextBtn").hide();
 					// clearBasicInfo()//清楚所有的基本信息
 					return ;//返回
 				}else{//非必须拦截的表
 					var isReturn=false;
 					$.messager.confirm('提示','该儿童年龄不在工具推荐年龄范围内,是否继续测试?',function(r){
 					    if (!r){
-					    	$('#TBirthday').datebox('setValue', '');//清空不符合年龄段的生日
+					    	//$('#TBirthday').datebox('setValue', '');//清空不符合年龄段的生日
+							$("#nextBtn").hide();
 					    	isReturn=true;
 					    } 
 					    	
 					});
-					if(isReturn)return;
+					if(isReturn){$("#nextBtn").attr('disabled',"disabled");return;}
 				}
+				if(canOpen)$("#nextBtn").show();
 				return;
 			}
 			//初始化隐藏字段

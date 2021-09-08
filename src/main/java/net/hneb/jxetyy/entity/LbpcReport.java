@@ -95,7 +95,7 @@ public class LbpcReport implements java.io.Serializable {
 	@Column(name="C_ILL_HISTORY")
 	private String CIllHistory;
 	@Column(name="C_EFF_MRK")
-	private String CEffMrk;
+	private String CEffMrk;//"1"正常，"2"作废
 	@Column(name="C_SCHOOL")
 	private String CSchool;
 	@Column(name="C_CLAZZ")

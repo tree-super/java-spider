@@ -158,9 +158,10 @@
 </div>
 </body>
 <script type="text/javascript">
+    var pkid = '[[${pkid}]]';
     $(document).ready(function () {
         initReport();
-        initLbpcReport();
+        initLbpcReport(pkid);
         utils.closeLoading();
     });
 
