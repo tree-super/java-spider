@@ -163,7 +163,7 @@
                             <input type="text" name="CPhoneNo"
                                    class="easyui-validatebox"
                                    data-options="required:true"
-                                   th:readonly="${phone} == null or ${#strings.isEmpty(phone)}?'':'readonly'"
+                                   th:readonly="${phone} == null or ${#strings.isEmpty(phone)}?'false':'readonly'"
                                    th:value="${phone}"/>
                         </div>
                         <th:block th:if="${order} == null or ${#strings.isEmpty(order)}">
@@ -185,7 +185,7 @@
                             <input type="text" name="CChildNme"
                                    class="easyui-validatebox"
                                    data-options="required:true"
-                                   th:readonly="${name} == null or ${#strings.isEmpty(name)}?'':'readonly'"
+                                   th:readonly="${name} == null or ${#strings.isEmpty(name)}?'false':'readonly'"
                                    th:value="${name}"/></div>
                         <div class="ui-opt noprint" id="arch" style="display:none">查看</div>
                     </li>
@@ -226,7 +226,7 @@
                         <div class="children-info-input">
                             <input type="text"
                                    name="CMenzhenNo"
-                                   th:readonly="${patientNo} == null or ${#strings.isEmpty(patientNo)}?'':'readonly'"
+                                   th:readonly="${patientNo} == null or ${#strings.isEmpty(patientNo)}?'false':'readonly'"
                                    th:value="${patientNo}"
                             /></div>
                     </li>
@@ -235,7 +235,7 @@
                         <div class="children-info-input">
                             <input type="text"
                                    name="CInfoOffer"
-                                   th:readonly="${escort} == null or ${#strings.isEmpty(escort)}?'':'readonly'"
+                                   th:readonly="${escort} == null or ${#strings.isEmpty(escort)}?'false':'readonly'"
                                    th:value="${escort}"
                             /></div>
                     </li>
@@ -244,7 +244,7 @@
                         <div class="children-info-input">
                             <input type="text"
                                    name="CChildRel"
-                                   th:readonly="${relation} == null or ${#strings.isEmpty(relation)}?'':'readonly'"
+                                   th:readonly="${relation} == null or ${#strings.isEmpty(relation)}?'false':'readonly'"
                                    th:value="${relation}"
                             /></div>
                         <th:block th:if="${relation} == null or ${#strings.isEmpty(relation)}">
@@ -258,7 +258,7 @@
                                    name="CIllHistory"
                                    ills=""
                                    placeholder="多种疾病请用空格隔开"
-                                   th:readonly="${history} == null or ${#strings.isEmpty(history)}?'':'readonly'"
+                                   th:readonly="${history} == null or ${#strings.isEmpty(history)}?'false':'readonly'"
                                    th:value="${history}"
                             /></div>
                     </li>
@@ -270,7 +270,7 @@
                             <input type="text" name="CExecutor"
                                    class="easyui-validatebox"
                                    data-options="required:true"
-                                   th:readonly="${executor} == null or ${#strings.isEmpty(executor)}?'':'readonly'"
+                                   th:readonly="${executor} == null or ${#strings.isEmpty(executor)}?'false':'readonly'"
                                    th:value="${executor}"
                             /></div>
                     </li>
@@ -282,7 +282,7 @@
                             <input type="text" name="CDoctor"
                                    class="easyui-validatebox"
                                    data-options="required:true"
-                                   th:readonly="${doctor} == null or ${#strings.isEmpty(doctor)}?'':'readonly'"
+                                   th:readonly="${doctor} == null or ${#strings.isEmpty(doctor)}?'false':'readonly'"
                                    th:value="${doctor}"
                             /></div>
                     </li>
