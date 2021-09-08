@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -162,7 +163,8 @@ public class ReportServiceImpl implements ReportService {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-
+        //如果是他人调用 cpt  进入页面生产报告则需要保存报告 id 和 order 对应关系
+        report.setCAns15(basicJson.getString("order"));
         report.setCChildNme(basicJson.getString("CChildNme"));
         report.setCChildSex(basicJson.getString("CChildSex"));
         report.setTBirthday(basicJson.getString("TBirthday"));
@@ -360,6 +362,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    @Transactional
     public boolean disableReport(String pkId) {
         LbpcReport report = findById(pkId);
         if(report == null || StringUtils.isBlank(pkId)) return false;
@@ -368,6 +371,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    @Transactional
     public boolean recoverReport(String pkId) {
         LbpcReport report = findById(pkId);
         if(report == null || StringUtils.isBlank(pkId)) return false;
@@ -441,6 +445,4 @@ public class ReportServiceImpl implements ReportService {
         return  (zs-x)/sd;
 
     }
-
-
 }

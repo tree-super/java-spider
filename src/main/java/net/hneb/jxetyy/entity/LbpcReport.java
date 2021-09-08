@@ -138,6 +138,7 @@ public class LbpcReport implements java.io.Serializable {
 	private String CAns13;
 	@Column(name="C_ANS_14")
 	private String CAns14;
+	//接口调用的 order
 	@Column(name="C_ANS_15")
 	private String CAns15;
 	@Column(name="C_EXT1")

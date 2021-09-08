@@ -4,18 +4,24 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import net.hneb.jxetyy.common.mapper.SearchFilters;
+import net.hneb.jxetyy.common.mapper.SearchOp;
 import net.hneb.jxetyy.entity.LbpcNo;
 import net.hneb.jxetyy.entity.LbpcQuest;
+import net.hneb.jxetyy.entity.LbpcReport;
 import net.hneb.jxetyy.service.LbNoService;
-import net.hneb.jxetyy.utils.DateUtil;
+import net.hneb.jxetyy.service.ReportService;
 import net.hneb.jxetyy.utils.HnebRequestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author zhangshuai
@@ -26,9 +32,50 @@ import javax.servlet.http.HttpServletRequest;
 public class LbController {
     @Autowired
     private LbNoService lbNoService;
+    @Autowired
+    private ReportService reportService;
 
     @RequestMapping(value = {"/lb/0809" })
     public String lb0809() {
+        return "lb/0809";
+    }
+
+    @RequestMapping(value = {"/cpt" })
+    public String cpt(@RequestParam(name = "order",required = false) String order,
+                      @RequestParam(name = "name",required = false) String name,
+                      @RequestParam(name = "sex",required = false) String sex,
+                      @RequestParam(name = "bithday",required = false) String bithday,
+                      @RequestParam(name = "phone",required = false) String phone,
+                      @RequestParam(name = "executor",required = false) String executor,
+                      @RequestParam(name = "doctor",required = false) String doctor,
+                      @RequestParam(name = "patientNo",required = false) String patientNo,
+                      @RequestParam(name = "escort",required = false) String escort,
+                      @RequestParam(name = "relation",required = false) String relation,
+                      @RequestParam(name = "history",required = false) String history,
+                      Model model) {
+        if(StringUtils.isNotBlank(order)){
+            List<LbpcReport> reports = reportService.select(new SearchFilters("C_ANS_15", SearchOp.EQ, order));
+            if(reports == null || reports.isEmpty()){model.addAttribute("order", order);}
+            else if(reports.stream().anyMatch(r -> "1".equals(r.getCEffMrk()))){
+                model.addAttribute("error", "该订单已经存在报告，如需要测试请先作废之前的报告！");
+            }
+        } else {model.addAttribute("error", "缺少基本信息:order，无法进行测试，请关闭页面重新进入！");}
+        if(StringUtils.isNotBlank(name))model.addAttribute("name", name);
+        else model.addAttribute("error", "缺少基本信息:name，无法进行测试，请关闭页面重新进入！");
+        if(StringUtils.isNotBlank(sex))model.addAttribute("sex", sex);
+        else model.addAttribute("error", "缺少基本信息:sex，无法进行测试，请关闭页面重新进入！");
+        if(StringUtils.isNotBlank(bithday))model.addAttribute("bithday", bithday);
+        else model.addAttribute("error", "缺少基本信息:bithday，无法进行测试，请关闭页面重新进入！");
+        if(StringUtils.isNotBlank(phone))model.addAttribute("phone", phone);
+        else model.addAttribute("error", "缺少基本信息:phone，无法进行测试，请关闭页面重新进入！");
+        if(StringUtils.isNotBlank(executor))model.addAttribute("executor", executor);
+        else model.addAttribute("error", "缺少基本信息:executor，无法进行测试，请关闭页面重新进入！");
+        if(StringUtils.isNotBlank(doctor))model.addAttribute("doctor", doctor);
+        else model.addAttribute("error", "缺少基本信息:doctor，无法进行测试，请关闭页面重新进入！");
+        if(StringUtils.isNotBlank(patientNo))model.addAttribute("patientNo", patientNo);
+        if(StringUtils.isNotBlank(escort))model.addAttribute("escort", escort);
+        if(StringUtils.isNotBlank(relation))model.addAttribute("relation", relation);
+        if(StringUtils.isNotBlank(order))model.addAttribute("history", history);
         return "lb/0809";
     }
 
@@ -70,6 +117,15 @@ public class LbController {
         return HnebRequestUtils.getResponseData(custDataRes, new JSONArray(), true);
     }
 
+    @RequestMapping(value = {"/callback" })
+    @ResponseBody
+    public JSONObject callback(JSONObject json) {
+        log.info("回写的订单信息, {}", json.toJSONString());
+        JSONObject res = new JSONObject();
+        res.put("result", "好");
+        return res;
+    }
+
     @RequestMapping(value = {"lb/submit"})
     @ResponseBody
     public JSONObject submit(HttpServletRequest request){
@@ -90,6 +146,7 @@ public class LbController {
         JSONObject bmResult = lbNoService.submit(quest, basicMap,custData);
         return HnebRequestUtils.getResponseData(bmResult, new JSONArray(), true);
     }
+
 
     private LbpcQuest mapperValue(JSONObject questJson){
         LbpcQuest quest = new LbpcQuest();

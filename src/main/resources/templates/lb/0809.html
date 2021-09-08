@@ -153,13 +153,18 @@
                     <input type="hidden" name="CExt2" id="CExt2"/>
                     <input type="hidden" name="CExt3" id="CExt3"/>
                     <input type="hidden" name="hiddenNum" id="hiddenNum"/>
+                    <input id="order" type="hidden" th:value="${order}">
                 <ul class="clear">
                     <li class="col3">
                         <em>
                             <span class="red-required">*</span>
                             联系手机&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CPhoneNo" class="easyui-validatebox"
-                                                                data-options="required:true,validType:'isPhoneNo'"/>
+                        <div class="children-info-input">
+                            <input type="text" name="CPhoneNo"
+                                   class="easyui-validatebox"
+                                   data-options="required:true"
+                                   th:readonly="${phone} == null or ${#strings.isEmpty(phone)}?'':'readonly'"
+                                   th:value="${phone}"/>
                         </div>
                         <div class="ui-opt noprint" id="clearBasicInfo">清除</div>
                         <!--关联手机号下拉 -->
@@ -174,8 +179,12 @@
                         <em>
                             <span class="red-required">*</span>
                             姓名&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CChildNme" class="easyui-validatebox"
-                                                                data-options="required:true"/></div>
+                        <div class="children-info-input">
+                            <input type="text" name="CChildNme"
+                                   class="easyui-validatebox"
+                                   data-options="required:true"
+                                   th:readonly="${name} == null or ${#strings.isEmpty(name)}?'':'readonly'"
+                                   th:value="${name}"/></div>
                         <div class="ui-opt noprint" id="arch" style="display:none">查看</div>
                     </li>
                     <li class="col3">
@@ -185,8 +194,16 @@
                         <div class="children-info-input">
                             <!-- jeasyui的api使用必须使用id CChildSex不能去掉 -->
                             <select id="CChildSex" name="CChildSex" class="easyui-combobox" data-options="editable:false,required:true">
-                                <option value="M">男</option>
-                                <option value="F">女</option>
+                                <th:block th:if="${sex} == null or ${#strings.isEmpty(sex)}">
+                                    <option value="M">男</option>
+                                    <option value="F">女</option>
+                                </th:block>
+                                <th:block th:if="${sex} eq 'M'">
+                                <option value="M" th:selected="${sex} eq 'M' ? 'selected':''">男</option>
+                                </th:block>
+                                <th:block th:if="${sex} eq 'F'">
+                                <option value="F" th:selected="${sex} eq 'F' ? 'selected':''">女</option>
+                                </th:block>
                             </select>
                         </div>
                     </li>
@@ -197,44 +214,75 @@
                         <!-- jeasyui的api使用必须使用id TBirthday不能去掉 -->
                         <div class="ui-gauge-input children-info-input">
                             <input type="text" id="TBirthday" name="TBirthday"
-                                   class="easyui-datebox"
-                                   data-options="editable:false,validType:['isDate'],required:true"/>
+                                   th:class="${bithday} == null or ${#strings.isEmpty(bithday)}?'easyui-datebox':''"
+                                   data-options="editable:false,validType:['isDate'],required:true"
+                                   th:value="${bithday}"/>
                         </div>
                     </li>
                     <li class="col2">
                         <em>门诊/住院号&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CMenzhenNo"/></div>
+                        <div class="children-info-input">
+                            <input type="text"
+                                   name="CMenzhenNo"
+                                   th:readonly="${patientNo} == null or ${#strings.isEmpty(patientNo)}?'':'readonly'"
+                                   th:value="${patientNo}"
+                            /></div>
                     </li>
                     <li class="col2">
-                        <em>信息提供者&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CInfoOffer"/></div>
+                        <em>陪同人员&nbsp;</em>
+                        <div class="children-info-input">
+                            <input type="text"
+                                   name="CInfoOffer"
+                                   th:readonly="${escort} == null or ${#strings.isEmpty(escort)}?'':'readonly'"
+                                   th:value="${escort}"
+                            /></div>
                     </li>
                     <li class="col2">
                         <em>与儿童的关系&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CChildRel"/></div>
+                        <div class="children-info-input">
+                            <input type="text"
+                                   name="CChildRel"
+                                   th:readonly="${relation} == null or ${#strings.isEmpty(relation)}?'':'readonly'"
+                                   th:value="${relation}"
+                            /></div>
+                        <th:block th:if="${relation} == null or ${#strings.isEmpty(relation)}">
                         <div class="ui-opt noprint" id="reltips">选择</div>
+                        </th:block>
                     </li>
                     <li>
                         <em>特殊病史&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CIllHistory" ills=""
-                                                                placeholder="多种疾病请用空格隔开"/></div>
-                        <div class="ui-opt" id="illTips" style="display:none">选择</div>
+                        <div class="children-info-input">
+                            <input type="text"
+                                   name="CIllHistory"
+                                   ills=""
+                                   placeholder="多种疾病请用空格隔开"
+                                   th:readonly="${history} == null or ${#strings.isEmpty(history)}?'':'readonly'"
+                                   th:value="${history}"
+                            /></div>
                     </li>
                     <li class="col2">
                         <em>
                             <span class="red-required">*</span>
                             录入人&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CExecutor" class="easyui-validatebox"
-                                                                data-options="required:true"/></div>
-                        <div class="ui-opt noprint" id="executortips">选择</div>
+                        <div class="children-info-input">
+                            <input type="text" name="CExecutor"
+                                   class="easyui-validatebox"
+                                   data-options="required:true"
+                                   th:readonly="${executor} == null or ${#strings.isEmpty(executor)}?'':'readonly'"
+                                   th:value="${executor}"
+                            /></div>
                     </li>
                     <li class="col2">
                         <em>
                             <span class="red-required">*</span>
                             申请医生&nbsp;</em>
-                        <div class="children-info-input"><input type="text" name="CDoctor" class="easyui-validatebox"
-                                                                data-options="required:true"/></div>
-                        <div class="ui-opt noprint" id="doctortips">选择</div>
+                        <div class="children-info-input">
+                            <input type="text" name="CDoctor"
+                                   class="easyui-validatebox"
+                                   data-options="required:true"
+                                   th:readonly="${doctor} == null or ${#strings.isEmpty(doctor)}?'':'readonly'"
+                                   th:value="${doctor}"
+                            /></div>
                     </li>
                 </ul>
             </form>
@@ -341,14 +389,21 @@
     //反应时间数组
     var reaction = [];
     //平均反应时间
-    let averageReaction = 0;
-
+    var averageReaction = 0;
+    var pageError = '[[${error}]]';
 
     $(document).ready(function () {
         utils.initHelpWindow(true);
         var divLeftWidth = $('.questionnaire-left').width();
         $(".ui-btn").css('width', divLeftWidth - 17);
         initCommon();
+        if(pageError && pageError.length > 5){
+            $("#nextBtn").disable();
+            $.messager.alert('系统提示', pageError,
+                'info', function () {
+                });
+            return;
+        }
         initData();
         utils.closeLoading();
         utils.initDataGrid();
@@ -368,51 +423,6 @@
         $.messager.alert('系统提示', '测试时间还没有结束，确定要结束答题吗？', 'info', function () {
             parent.closeTab('current');
         });
-        // val = $('input[name=\'type\']:checked').val();
-        // if (val == 0) {
-        //     $.messager.alert('系统提示', '练习结束，点击确定开始正式答题',
-        //         'info', function () {
-        //             for (let i = 0; i < timeOut.length; i++) {
-        //                 clearTimeout(timeOut[i]);
-        //
-        //             }
-        //             //取消键盘事件
-        //             $(document).unbind('keydown');
-        //             $(document).unbind('keyup');
-        //             //重新打开开始按钮
-        //             $('#start').removeClass('notClickn');
-        //             $('#over').show();
-        //             //重新打开radio
-        //             input.attr('disabled', false);
-        //             $("input[name='type']:eq(1)").prop("checked", 'checked');
-        //         });
-        // } else if (val == 1) {
-        //     $.messager.alert('系统提示', '测试时间还没有结束，确定要结束答题吗？',
-        //         'info', function () {
-        //             for (let i = 0; i < timeOut.length; i++) {
-        //                 clearTimeout(timeOut[i]);
-        //
-        //             }
-        //             //循环结束时提交报告
-        //             $.messager.alert('系统提示', '答题结束，点击确认生成报告',
-        //                 'info', function () {
-        //                     //取消键盘事件
-        //                     $(document).unbind('keydown');
-        //                     $(document).unbind('keyup');
-        //                     //重新打开开始按钮
-        //                     $('#start').removeClass('notClickn');
-        //                     $('#over').show();
-        //                     //重新打开radio
-        //                     input.attr('disabled', false);
-        //                     //分段结果集存入
-        //                     var row = {"zq": zq, "cw": cw, "lb": lb, "zs": zs};
-        //                     var strrow = JSON.stringify(row);
-        //                     result.push(strrow);
-        //                     $("#CExt1").val('[' + result + ']');
-        //                     submit();
-        //                 });
-        //         });
-        // }
     }
 
     var showNum=[1, 2, 4, 5, 6, 7, 8];
@@ -618,8 +628,8 @@
                     //统计分段固定为2分钟
                     if (i == question.length - 1) {
                         //计算平均反应时间
-                        let sum=0;
-                        for(let j =0;j<reaction.length;j++){
+                        var sum=0;
+                        for(var j =0;j<reaction.length;j++){
                             sum+=reaction[j];
                         }
                         averageReaction=sum/reaction.length;
@@ -723,22 +733,22 @@
         interval = 1.5;
         //创建答题数组
         //元数据
-        let metadata = [0, 1, 2, 4, 5, 6, 7, 8, 9];
+        var metadata = [0, 1, 2, 4, 5, 6, 7, 8, 9];
         //3的插入序列
-        let sequence = [];
+        var sequence = [];
         //创建答题数组
         //分段数组（2分钟）
         var questPart = [];
         //倍数（2分钟）
         var multiple = 6;
         for (var i = 1; i <= multiple; i++) {
-            for (let i = 0; i < 16; i++) {
+            for (var i = 0; i < 16; i++) {
                 sequence[i] = Math.floor(Math.random() * 79)
             }
-            for (let i = 0; i < 80; i++) {
+            for (var i = 0; i < 80; i++) {
                 //下标是否在插入序列中
                 if ($.inArray(i, sequence) == -1) {
-                    let num = metadata.splice(Math.random() * 9, 1);
+                    var num = metadata.splice(Math.random() * 9, 1);
                     if (metadata.length < 9) {
                         metadata.push(num[0]);
                     }
@@ -751,13 +761,13 @@
         }
        // console.log(question);
         //试用数组
-        for (let i = 0; i < 16; i++) {
+        for (var i = 0; i < 16; i++) {
             sequence[i] = Math.floor(Math.random() * 79)
         }
-        for (let i = 0; i < 80; i++) {
+        for (var i = 0; i < 80; i++) {
             //下标是否在插入序列中
             if ($.inArray(i, sequence) == -1) {
-                let num = metadata.splice(Math.random() * 9, 1);
+                var num = metadata.splice(Math.random() * 9, 1);
                 if (metadata.length < 9) {
                     metadata.push(num[0]);
                 }

@@ -96,7 +96,7 @@ function viewReport() {
 function exportPDF() {
     $(".ui-btn").hide();
     //创建照片
-    let c = document.createElement("canvas");
+    var c = document.createElement("canvas");
     //照片高度和宽度是页面元素的两倍
     c.width = document.body.clientWidth * 2;
     c.height = document.body.clientHeight * 2;

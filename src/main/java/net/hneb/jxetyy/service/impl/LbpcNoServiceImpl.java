@@ -12,8 +12,10 @@ import net.hneb.jxetyy.service.ReportService;
 import net.hneb.jxetyy.service.UserService;
 import net.hneb.jxetyy.utils.AgeUtils;
 import net.hneb.jxetyy.utils.DateUtil;
+import net.hneb.jxetyy.utils.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,9 @@ import java.util.Map;
 @Slf4j
 @Service
 public class LbpcNoServiceImpl implements LbNoService {
+
+    @Value("${net.hneb.his.order}")
+    private String his;
 
     @Autowired
     private LbpcNoDao lbpcNoDao;
@@ -87,12 +92,13 @@ public class LbpcNoServiceImpl implements LbNoService {
 
         // 保存测评原始数据
         //this.pcService.saveOrUpdateQuest(quest, "1", custData);// 提交状态
-
         // 生成测评报告
-        // LbpcReport report = this.reportFactory.create(quest, basicMap,custData);
         LbpcReport report = reportService.create(quest, basicJson, custData);
         // 保存测评报告
         reportService.saveReport(report);
+        log.info("生成报告:{}", report.getCPkId());
+        //回写报告 id 到 his接口,记得在作废报告也要调用回写报告接口
+        syncOrder(report);
 
         JSONObject result = new JSONObject();
         result.put("flag", true);
@@ -100,4 +106,10 @@ public class LbpcNoServiceImpl implements LbNoService {
         return result;
     }
 
+    private void syncOrder(LbpcReport report){
+        log.info("回写报告,report:{},order:{}", report.getCPkId(), report.getCAns15());
+        JSONObject req = new JSONObject();
+        req.put("result", "好");
+        HttpUtil.post(his, req.toJSONString());
+    }
 }

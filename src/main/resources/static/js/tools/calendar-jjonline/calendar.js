@@ -584,7 +584,7 @@ var calendar = {
 };
 
 // -----------------------------------------
-let toSolarString = function (l_year, l_month, l_day){
+var toSolarString = function (l_year, l_month, l_day){
 	
 			/**调用以上方法后返回类似如下JSON 对象 */
 			/** c开头公历属性值
@@ -615,12 +615,12 @@ let toSolarString = function (l_year, l_month, l_day){
 				}
 			    --------------
 			  */
-			  let objCalendar = calendar.lunar2solar(l_year, l_month, l_day);
+            var objCalendar = calendar.lunar2solar(l_year, l_month, l_day);
 			  
 			  return objCalendar.cYear.toString() + "-" + addPrefix0(objCalendar.cMonth.toString()) + "-" + addPrefix0(objCalendar.cDay.toString());
 }
 
-let addPrefix0 = function (numString){
+var addPrefix0 = function (numString){
 	if(1 === numString.length){
 		return "0" + numString;
 	}
