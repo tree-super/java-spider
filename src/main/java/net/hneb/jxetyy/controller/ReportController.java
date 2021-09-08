@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,7 +42,7 @@ public class ReportController {
     private ReportService reportService;
 
     @RequestMapping(value = {"/report/{id}" })
-    public String report0809(@RequestParam(name = "id") String pkId, Model model) {
+    public String report0809(@PathVariable(name = "id") String pkId, Model model) {
         model.addAttribute("pkid", pkId);
         return "report/0809-report";
     }
