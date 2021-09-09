@@ -32,4 +32,6 @@ public interface ReportService {
     boolean disableReport(String pkId);
 
     boolean recoverReport(String pkId);
+
+    void syncOrder(LbpcReport report);
 }

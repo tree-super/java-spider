@@ -20,8 +20,13 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -105,10 +110,15 @@ public class ReportServiceImpl implements ReportService {
     @Value("${net.hneb.deptname}")
     private String deptname;
 
+    @Value("${net.hneb.his.order}")
+    private String his;
+
     @Autowired
     private LbpcReportDao lbpcReportDao;
     @Autowired
     private BasNormDao basNormDao;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public List<LbpcReport> select(SearchFilters filters) {
@@ -367,6 +377,8 @@ public class ReportServiceImpl implements ReportService {
         LbpcReport report = findById(pkId);
         if(report == null || StringUtils.isBlank(pkId)) return false;
         int res = lbpcReportDao.updateState(pkId, "2");
+        report.setCEffMrk("2");
+        syncOrder(report);
         return res > 0;
     }
 
@@ -376,7 +388,31 @@ public class ReportServiceImpl implements ReportService {
         LbpcReport report = findById(pkId);
         if(report == null || StringUtils.isBlank(pkId)) return false;
         int res = lbpcReportDao.updateState(pkId, "1");
+        report.setCEffMrk("1");
+        syncOrder(report);
         return res > 0;
+    }
+
+    @Override
+    public void syncOrder(LbpcReport report){
+        log.info("回写报告,report:{},order:{}", report.getCPkId(), report.getCAns15());
+        JSONObject req = new JSONObject();
+        req.put("order", report.getCAns15());//订单 id
+        req.put("report", report.getCPkId());//报告 id
+        req.put("state", report.getCEffMrk());//"1"正常，"2"作废
+        req.put("testTime", DateUtil.getDateStr(report.getTTestTm()));//测试时间
+        req.put("result", report.getCAns7());// 结论
+        req.put("level", report.getCAns8());// 症状程度
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        String json = req.toJSONString();
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
+        String now = DateUtil.getDateStr(new Date());
+        log.info("http url:{}, json:{}, time:{}", his, json, now);
+        ResponseEntity<String> postForEntity = restTemplate.postForEntity(his, request, String.class);
+        String result = postForEntity.getBody();
+        log.info("http url:{}, result:{}, time:{}", result, now);
+        //        HttpUtil.post(his, req.toJSONString());
     }
 
     private String getAge(LbpcReport report) {
