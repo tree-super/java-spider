@@ -377,8 +377,10 @@ public class ReportServiceImpl implements ReportService {
         LbpcReport report = findById(pkId);
         if(report == null || StringUtils.isBlank(pkId)) return false;
         int res = lbpcReportDao.updateState(pkId, "2");
-        report.setCEffMrk("2");
-        syncOrder(report);
+        if(StringUtils.isNotBlank(report.getCAns15())) {
+            report.setCEffMrk("2");
+            syncOrder(report);
+        }
         return res > 0;
     }
 
@@ -388,8 +390,10 @@ public class ReportServiceImpl implements ReportService {
         LbpcReport report = findById(pkId);
         if(report == null || StringUtils.isBlank(pkId)) return false;
         int res = lbpcReportDao.updateState(pkId, "1");
-        report.setCEffMrk("1");
-        syncOrder(report);
+        if(StringUtils.isNotBlank(report.getCAns15())) {
+            report.setCEffMrk("1");
+            syncOrder(report);
+        }
         return res > 0;
     }
 
