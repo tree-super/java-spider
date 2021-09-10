@@ -749,6 +749,7 @@ function bindEvent(){
 					$("input[name='NConceiveDay']").val(result.days);
 				}
 				try{onTBirthdayChange();}catch(e){}
+				if(canOpen)$("#nextBtn").show();
 			}catch(e){}
 		},
 		validateOnCreate:false,
