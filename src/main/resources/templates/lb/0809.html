@@ -391,7 +391,7 @@
     //反应时间数组
     var reaction = [];
     //平均反应时间
-    let averageReaction = 0;
+    var averageReaction = 0;
     var pageError = '[[${error}]]';
     var birthdayVal = '[[${birthday}]]';
     var canOpen = true;
@@ -636,8 +636,8 @@
                     //统计分段固定为2分钟
                     if (i == question.length - 1) {
                         //计算平均反应时间
-                        let sum=0;
-                        for(let j =0;j<reaction.length;j++){
+                        var sum=0;
+                        for(var j =0;j<reaction.length;j++){
                             sum+=reaction[j];
                         }
                         averageReaction=sum/reaction.length;
@@ -741,47 +741,47 @@
         interval = 1.5;
         //创建答题数组
         //元数据
-        let metadata = [0, 1, 2, 4, 5, 6, 7, 8, 9];
+        var metadata = [0, 1, 2, 4, 5, 6, 7, 8, 9];
         //3的插入序列
-        let sequence = [];
+        var sequence = [];
         //创建答题数组
         //分段数组（2分钟）
         var questPart = [];
         //倍数（2分钟）
         var multiple = 6;
         for (var i = 1; i <= multiple; i++) {
-            for (let i = 0; i < 16; i++) {
-                sequence[i] = Math.floor(Math.random() * 79)
+            for (var i1 = 0; i1 < 16; i1++) {
+                sequence[i1] = Math.floor(Math.random() * 79)
             }
-            for (let i = 0; i < 80; i++) {
+            for (let i2 = 0; i2 < 80; i2++) {
                 //下标是否在插入序列中
-                if ($.inArray(i, sequence) == -1) {
-                    let num = metadata.splice(Math.random() * 9, 1);
+                if ($.inArray(i2, sequence) == -1) {
+                    var num = metadata.splice(Math.random() * 9, 1);
                     if (metadata.length < 9) {
                         metadata.push(num[0]);
                     }
-                    questPart[i] = num[0];
+                    questPart[i2] = num[0];
                 } else {
-                    questPart[i] = 3;
+                    questPart[i2] = 3;
                 }
             }
             question = question.concat(questPart);
         }
        // console.log(question);
         //试用数组
-        for (let i = 0; i < 16; i++) {
-            sequence[i] = Math.floor(Math.random() * 79)
+        for (var i3 = 0; i3 < 16; i3++) {
+            sequence[i3] = Math.floor(Math.random() * 79);
         }
-        for (let i = 0; i < 80; i++) {
+        for (var i4 = 0; i4 < 80; i4++) {
             //下标是否在插入序列中
-            if ($.inArray(i, sequence) == -1) {
-                let num = metadata.splice(Math.random() * 9, 1);
+            if ($.inArray(i4, sequence) == -1) {
+                var num = metadata.splice(Math.random() * 9, 1);
                 if (metadata.length < 9) {
                     metadata.push(num[0]);
                 }
-                trial[i] = num[0];
+                trial[i4] = num[0];
             } else {
-                trial[i] = 3;
+                trial[i4] = 3;
             }
         }
         // for (var i = 0; i < 2 * 60 / interval; i++) {
